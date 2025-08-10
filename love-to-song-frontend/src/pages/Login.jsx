@@ -1,10 +1,10 @@
 // file: love-to-song-frontend/src/pages/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../services/authService';
+import { authService } from '../services/authService';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -12,11 +12,11 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(username, password);
+      await authService.login({ email, password });
       // If login is successful, redirect to dashboard
       navigate('/dashboard');
     } catch (err) {
-      setError('Invalid username or password');
+      setError('Invalid email or password');
     }
   };
 
@@ -25,11 +25,11 @@ const Login = () => {
       <h2>Login to LoveToSong</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Username:</label>
+          <label>Email:</label>
           <input 
-            type="text" 
-            value={username} 
-            onChange={e => setUsername(e.target.value)} 
+            type="email" 
+            value={email} 
+            onChange={e => setEmail(e.target.value)} 
             required 
           />
         </div>

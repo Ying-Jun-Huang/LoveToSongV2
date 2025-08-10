@@ -1,104 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>音樂點歌系統 - 首頁</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <style>
-    .player-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .player-card {
-      width: 120px;
-      text-align: center;
-    }
-    .player-card img {
-      width: 100px;
-      height: 100px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
-  </style>
-</head>
-<body id="page-index">
-  <!-- 全站共用頁首導覽列 -->
-  <header>
-    <!-- 導覽列統一格式範例 -->
-    <nav>
-      <a href="index.html" data-page="page-index" data-i18n="nav.home">首頁</a>
-      <a href="songs.html" data-page="page-songs" data-i18n="nav.songs">歌曲列表</a>
-      <a href="add-song.html" id="addSongNav" data-page="page-add-song" data-i18n="nav.addSong" style="display:none;">新增歌曲</a>
-      <a href="add-player.html" id="addPlayerNav" style="display:none;">新增玩家</a>
-      <span style="flex:1"></span>
-      <!-- 語言切換下拉選單 -->
-      <select id="langSelect">
-        <option value="zh">中文</option>
-        <option value="en">English</option>
-      </select>
-      <!-- 登入按鈕 -->
-      <a href="login.html" id="loginNav" style="margin-left: 1em;">登入</a>
-      <a href="#" id="logoutNav" style="margin-left: 1em; display:none;">登出</a>
-    </nav>
-  </header>
-
-  <main>
-    <!-- 歌手資訊區（名稱、頭像、簡介） -->
-    <section id="singer-info">
-      <img src="assets/img/singer.png" alt="Singer Photo" />
-      <div>
-        <h1 id="singerName">Tooler</h1>
-        <h3 data-i18n="home.introTitle">歌手簡介</h3>
-        <p data-i18n="home.introText">這是一個很愛玩且不能算歌手的玩家簡介，請勿拍打餵食。</p>
-      </div>
-    </section>
-
-    <!-- 尚未演唱歌曲清單 -->
-    <section id="pending-songs">
-      <h2 data-i18n="home.pendingSongs">尚未演唱歌曲</h2>
-      <ul id="pendingList"></ul>
-    </section>
-
-    <!-- 玩家清單（從伺服器讀取） -->
-    <section id="players">
-      <h2 data-i18n="home.players">玩家清單</h2>
-      <div class="player-grid" id="playerList">
-        <!-- 將由 JavaScript 動態插入 -->
-      </div>
-    </section>
-  </main>
-
-  <script>
-    fetch("/getPlayers")
-      .then(res => res.json())
-      .then(players => {
-        const list = document.getElementById("playerList");
-        players.forEach(p => {
-          const div = document.createElement("div");
-          div.className = "player-card";
-
-          const img = document.createElement("img");
-          img.src = `assets/img/players/${p.ID1}.jpg`;
-          img.onerror = () => {
-            img.src = "assets/img/players/default.jpg";
-          };
-
-          const name = document.createElement("div");
-          name.textContent = p.name || p.玩家名稱 || p.nickname || p.暱稱 || ""; // 先抓英文欄位，沒有再抓舊的中文欄位
-
-          div.appendChild(img);
-          div.appendChild(name);
-          list.appendChild(div);
-        });
-      })
-      .catch(err => {
-        console.error("載入玩家資料失敗", err);
-      });
-  </script>
-
-  <script src="assets/js/main.js"></script>
-  <script src="assets/js/index.js"></script>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Love To Song - Music Request System"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Love To Song</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
 </html>

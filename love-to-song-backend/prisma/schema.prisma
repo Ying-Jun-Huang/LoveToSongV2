@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  password     String
+  username     String        @unique
+  role         UserRole      @default(USER)
+  description  String?
+  avatar       String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  songs        Song[]
+  songRequests SongRequest[]
+}
+
+model Song {
+  id           Int           @id @default(autoincrement())
+  title        String
+  artist       String?
+  duration     Int?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  userId       Int
+  category     String?
+  user         User          @relation(fields: [userId], references: [id])
+  songRequests SongRequest[]
+}
+
+model Player {
+  id           Int           @id @default(autoincrement())
+  playerId     String        @unique
+  playerIdAlt  String?
+  name         String
+  nickname     String?
+  gender       String?
+  birthday     DateTime?
+  joinDate     DateTime?
+  songCount    Int           @default(0)
+  storageCount Int           @default(0)
+  note         String?
+  crownDate    DateTime?
+  photoPath    String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  songRequests SongRequest[]
+}
+
+model SongRequest {
+  id          Int           @id @default(autoincrement())
+  songId      Int
+  userId      Int?
+  playerId    Int?
+  status      RequestStatus @default(PENDING)
+  priority    Int           @default(0)
+  note        String?
+  requestedAt DateTime      @default(now())
+  completedAt DateTime?
+  player      Player?       @relation(fields: [playerId], references: [id])
+  user        User?         @relation(fields: [userId], references: [id])
+  song        Song          @relation(fields: [songId], references: [id])
+}
+
+enum UserRole {
+  SUPER_ADMIN    // 高層管理員 - 系統最高權限
+  ADMIN          // 中間管理員 - 管理用戶和內容
+  MANAGER        // 基層管理員 - 管理日常操作
+  USER           // 使用者 - 基本功能
+  GUEST          // 訪客 - 僅瀏覽權限
+}
+
+enum RequestStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}

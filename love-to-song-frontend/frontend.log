@@ -1,0 +1,1924 @@
+
+> love-to-song-frontend@0.1.0 start
+> react-scripts start
+
+(node:79889) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:79889) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Failed to compile.
+
+[eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 44:49:  'SongListWidget' is not defined  react/jsx-no-undef
+  Line 45:46:  'StatsWidget' is not defined     react/jsx-no-undef
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+ERROR in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 44:49:  'SongListWidget' is not defined  react/jsx-no-undef
+  Line 45:46:  'StatsWidget' is not defined     react/jsx-no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/WidgetWrapper.jsx
+  Line 13:9:  'handleClose' is assigned a value but never used  no-unused-vars
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/WidgetWrapper.jsx
+  Line 13:9:  'handleClose' is assigned a value but never used  no-unused-vars
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 45:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 3:10:  'usePermissions' is defined but never used                                                                            no-unused-vars
+  Line 46:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 3:10:  'usePermissions' is defined but never used                                                                            no-unused-vars
+  Line 46:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+No issues found.
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 3:10:  'usePermissions' is defined but never used                                                                            no-unused-vars
+  Line 46:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 3:10:  'usePermissions' is defined but never used                                                                            no-unused-vars
+  Line 46:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 47:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 47:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 47:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 47:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/HomepageWidget.jsx
+  Line 47:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/HomepageWidget.jsx
+  Line 47:6:  React Hook useEffect has a missing dependency: 'fetchHomepageData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/PlayersWidget.jsx
+  Line 34:6:  React Hook useEffect has a missing dependency: 'handleSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SongRequestWidget.jsx
+  Line 23:10:  'filters' is assigned a value but never used                                                                         no-unused-vars
+  Line 23:19:  'setFilters' is assigned a value but never used                                                                      no-unused-vars
+  Line 33:6:   React Hook useEffect has a missing dependency: 'fetchInitialData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/layouts/DashboardLayout.jsx
+  Line 3:8:  'GridLayout' is defined but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.

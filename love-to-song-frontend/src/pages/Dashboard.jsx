@@ -2,20 +2,20 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../layouts/DashboardLayout';
-import { getAuthToken } from '../services/authService';
+import { authService } from '../services/authService';
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
     // Simple auth guard: if no token, redirect to login
-    if (!getAuthToken()) {
+    if (!authService.isAuthenticated()) {
       navigate('/login');
     }
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
+    authService.logout();
     navigate('/login');
   };
 

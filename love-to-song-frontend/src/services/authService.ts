@@ -1,28 +1,65 @@
-// file: love-to-song-frontend/src/services/authService.ts
-const API_BASE = 'http://localhost:3000';  // assume backend runs here
+import api from './api';
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface RegisterCredentials {
+  email: string;
+  username: string;
+  password: string;
+}
+
+export interface User {
+  id: number;
+  email: string;
+  username: string;
+}
 
 export interface LoginResponse {
   token: string;
-  user: { id: number; name: string; role: string };
+  user: User;
 }
 
-// Send login request to backend
-export async function login(username: string, password: string): Promise<LoginResponse> {
-  const res = await fetch(`${API_BASE}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password })
-  });
-  if (!res.ok) {
-    throw new Error('Login failed');
+export const authService = {
+  login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
+    try {
+      const response = await api.post('/auth/login', credentials);
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      return { token, user };
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  register: async (credentials: RegisterCredentials) => {
+    try {
+      const response = await api.post('/auth/register', credentials);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  
+  logout: () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  },
+  
+  getCurrentUser: (): User | null => {
+    const userStr = localStorage.getItem('user');
+    return userStr ? JSON.parse(userStr) : null;
+  },
+
+  isAuthenticated: (): boolean => {
+    const token = localStorage.getItem('token');
+    return !!token;
+  },
+
+  getAuthToken: (): string | null => {
+    return localStorage.getItem('token');
   }
-  const data = await res.json();
-  // Save JWT to localStorage for later use
-  localStorage.setItem('authToken', data.token);
-  return data;
-}
-
-// Utility to get the current JWT (if needed by other services)
-export function getAuthToken(): string | null {
-  return localStorage.getItem('authToken');
-}
+};
