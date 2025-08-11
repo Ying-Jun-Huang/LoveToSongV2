@@ -11,6 +11,13 @@ import { LayoutModule } from './layout/layout.module';
 import { PlayersModule } from './players/players.module';
 import { UploadModule } from './upload/upload.module';
 import { SongRequestsModule } from './song-requests/song-requests.module';
+// New v2 modules
+import { EventsModule } from './events/events.module';
+import { QueueModule } from './queue/queue.module';
+import { WishSongModule } from './wishsong/wishsong.module';
+import { AuditModule } from './audit/audit.module';
+import { NotificationModule } from './notifications/notification.module';
+import { ReportModule } from './reports/report.module';
 
 @Module({
   imports: [
@@ -29,6 +36,13 @@ import { SongRequestsModule } from './song-requests/song-requests.module';
     PlayersModule,
     UploadModule,
     SongRequestsModule,
+    // New v2 modules
+    EventsModule,
+    QueueModule,
+    WishSongModule,
+    AuditModule,
+    NotificationModule,
+    ReportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

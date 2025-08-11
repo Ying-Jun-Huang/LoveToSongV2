@@ -1,3 +1,4 @@
+// 完整點歌與歌手管理系統 Schema
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,77 +8,354 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ===== 用戶與權限系統 =====
 model User {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique
-  password     String
-  username     String        @unique
-  role         UserRole      @default(USER)
-  description  String?
-  avatar       String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  songs        Song[]
-  songRequests SongRequest[]
+  id                  Int               @id @default(autoincrement())
+  email               String            @unique
+  password            String
+  displayName         String
+  avatarUrl           String?
+  status              UserStatus        @default(ACTIVE)
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  
+  // 關聯
+  userRoles           UserRole[]
+  singer              Singer?
+  player              Player?
+  events              Event[]           // 主持的活動
+  requests            Request[]
+  wishSongs           WishSong[]
+  mediaAssets         MediaAsset[]
+  notifications       Notification[]
+  sentNotifications   Notification[]    @relation("NotificationSender")
+  auditLogs           AuditLog[]
+  proxyActions        AuditLog[]        @relation("ProxyActions")
+  requestOperations   RequestEvent[]    @relation("RequestOperator")
 }
 
+model Role {
+  id            Int         @id @default(autoincrement())
+  name          String      @unique
+  displayName   String
+  description   String?
+  permissions   String      // JSON 格式的權限配置
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  
+  userRoles     UserRole[]
+}
+
+model UserRole {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  roleId    Int
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      Role     @relation(fields: [roleId], references: [id])
+  
+  @@unique([userId, roleId])
+}
+
+// ===== 歌手系統 =====
+model Singer {
+  id              Int               @id @default(autoincrement())
+  userId          Int               @unique
+  stageName       String
+  bio             String?
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  singerTags      SingerTag[]
+  singerSongs     SingerSong[]
+  eventSingers    EventSinger[]
+  requests        Request[]
+  wishSongs       WishSong[]
+}
+
+// ===== 標籤系統 =====
+model Tag {
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  type          TagType
+  description   String?
+  createdAt     DateTime      @default(now())
+  
+  singerTags    SingerTag[]
+  songs         Song[]        @relation("SongGenre")
+}
+
+model SingerTag {
+  id        Int      @id @default(autoincrement())
+  singerId  Int
+  tagId     Int
+  createdAt DateTime @default(now())
+  
+  singer    Singer   @relation(fields: [singerId], references: [id], onDelete: Cascade)
+  tag       Tag      @relation(fields: [tagId], references: [id])
+  
+  @@unique([singerId, tagId])
+}
+
+// ===== 歌曲系統 =====
 model Song {
-  id           Int           @id @default(autoincrement())
-  title        String
-  artist       String?
-  duration     Int?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  userId       Int
-  category     String?
-  user         User          @relation(fields: [userId], references: [id])
-  songRequests SongRequest[]
+  id              Int             @id @default(autoincrement())
+  title           String
+  language        String?
+  genreTagId      Int?
+  era             String?
+  originalArtist  String?
+  isActive        Boolean         @default(true)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  genreTag        Tag?            @relation("SongGenre", fields: [genreTagId], references: [id])
+  songVersions    SongVersion[]
+  singerSongs     SingerSong[]
+  requests        Request[]
 }
 
+model SongVersion {
+  id              Int       @id @default(autoincrement())
+  songId          Int
+  versionLabel    String    // 例如: "原版", "國語版", "粵語版"
+  originalArtist  String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  song            Song      @relation(fields: [songId], references: [id], onDelete: Cascade)
+  requests        Request[]
+  
+  @@unique([songId, versionLabel])
+}
+
+model SingerSong {
+  id                Int      @id @default(autoincrement())
+  singerId          Int
+  songId            Int
+  learned           Boolean  @default(false)
+  timesRequested    Int      @default(0)
+  notes             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  singer            Singer   @relation(fields: [singerId], references: [id], onDelete: Cascade)
+  song              Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+  
+  @@unique([singerId, songId])
+}
+
+// ===== 玩家系統 =====
 model Player {
-  id           Int           @id @default(autoincrement())
-  playerId     String        @unique
-  playerIdAlt  String?
-  name         String
-  nickname     String?
-  gender       String?
-  birthday     DateTime?
-  joinDate     DateTime?
-  songCount    Int           @default(0)
-  storageCount Int           @default(0)
-  note         String?
-  crownDate    DateTime?
-  photoPath    String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  songRequests SongRequest[]
-}
-
-model SongRequest {
   id          Int           @id @default(autoincrement())
-  songId      Int
-  userId      Int?
-  playerId    Int?
-  status      RequestStatus @default(PENDING)
-  priority    Int           @default(0)
-  note        String?
-  requestedAt DateTime      @default(now())
-  completedAt DateTime?
-  player      Player?       @relation(fields: [playerId], references: [id])
+  userId      Int?          @unique // 可選：關聯到註冊用戶，設為唯一
+  name        String
+  nickname    String?
+  level       String?       @default("新手")
+  birthday    DateTime?
+  joinedAt    DateTime      @default(now())
+  notes       String?
+  photoKey    String?
+  isActive    Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
   user        User?         @relation(fields: [userId], references: [id])
-  song        Song          @relation(fields: [songId], references: [id])
+  requests    Request[]
+  wishSongs   WishSong[]
 }
 
-enum UserRole {
-  SUPER_ADMIN    // 高層管理員 - 系統最高權限
-  ADMIN          // 中間管理員 - 管理用戶和內容
-  MANAGER        // 基層管理員 - 管理日常操作
-  USER           // 使用者 - 基本功能
-  GUEST          // 訪客 - 僅瀏覽權限
+// ===== 活動系統 =====
+model Event {
+  id            Int             @id @default(autoincrement())
+  title         String
+  venue         String?
+  startsAt      DateTime
+  endsAt        DateTime
+  hostUserId    Int
+  status        EventStatus     @default(PLANNED)
+  description   String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  
+  host          User            @relation(fields: [hostUserId], references: [id])
+  eventSingers  EventSinger[]
+  requests      Request[]
+}
+
+model EventSinger {
+  id        Int      @id @default(autoincrement())
+  eventId   Int
+  singerId  Int
+  createdAt DateTime @default(now())
+  
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  singer    Singer   @relation(fields: [singerId], references: [id], onDelete: Cascade)
+  
+  @@unique([eventId, singerId])
+}
+
+// ===== 點歌系統 =====
+model Request {
+  id              Int             @id @default(autoincrement())
+  eventId         Int
+  playerId        Int?
+  userId          Int?            // 如果是註冊用戶點歌
+  singerId        Int?            // 指派的歌手
+  songId          Int
+  songVersionId   Int?
+  requestedAt     DateTime        @default(now())
+  desiredTime     String?         // 希望演唱時間
+  status          RequestStatus   @default(QUEUED)
+  notes           String?
+  priorityIndex   Int?            // 排序優先級
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  event           Event           @relation(fields: [eventId], references: [id])
+  player          Player?         @relation(fields: [playerId], references: [id])
+  user            User?           @relation(fields: [userId], references: [id])
+  singer          Singer?         @relation(fields: [singerId], references: [id])
+  song            Song            @relation(fields: [songId], references: [id])
+  songVersion     SongVersion?    @relation(fields: [songVersionId], references: [id])
+  requestEvents   RequestEvent[]
+}
+
+model RequestEvent {
+  id            Int       @id @default(autoincrement())
+  requestId     Int
+  type          String    // assign, reorder, status_change, etc.
+  occurredAt    DateTime  @default(now())
+  operatorUserId Int?
+  reason        String?
+  payload       String?   // JSON 格式的額外資料
+  
+  request       Request   @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  operator      User?     @relation("RequestOperator", fields: [operatorUserId], references: [id])
+}
+
+// ===== 願望歌系統 =====
+model WishSong {
+  id              Int               @id @default(autoincrement())
+  playerId        Int?
+  userId          Int?
+  singerId        Int?              // 指給特定歌手
+  title           String
+  originalArtist  String?
+  status          WishSongStatus    @default(PENDING)
+  notes           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  player          Player?           @relation(fields: [playerId], references: [id])
+  user            User?             @relation(fields: [userId], references: [id])
+  singer          Singer?           @relation(fields: [singerId], references: [id])
+}
+
+// ===== 媒體資源系統 =====
+model MediaAsset {
+  id          Int         @id @default(autoincrement())
+  ownerType   String      // Singer, Event, Player, etc.
+  ownerId     Int
+  key         String      @unique // 檔案路徑或 S3 key
+  mimeType    String
+  meta        String?     // JSON 格式的額外 metadata
+  createdBy   Int
+  createdAt   DateTime    @default(now())
+  
+  creator     User        @relation(fields: [createdBy], references: [id])
+}
+
+// ===== 通知系統 =====
+model Notification {
+  id          Int               @id @default(autoincrement())
+  userId      Int               // 接收者
+  senderId    Int?              // 發送者
+  type        NotificationType
+  title       String
+  content     String
+  payload     String?           // JSON 格式的額外資料
+  readAt      DateTime?
+  createdAt   DateTime          @default(now())
+  
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sender      User?             @relation("NotificationSender", fields: [senderId], references: [id])
+}
+
+// ===== 報表系統 =====
+model Analytics {
+  id        Int      @id @default(autoincrement())
+  date      DateTime // 日期
+  metric    String   // 指標名稱
+  entityId  Int?     // 相關實體 ID（可選）
+  value     Float    // 數值
+  createdAt DateTime @default(now())
+  
+  @@unique([date, metric, entityId])
+}
+
+// ===== 稽核日誌系統 =====
+model AuditLog {
+  id            Int       @id @default(autoincrement())
+  actorUserId   Int       // 執行操作的用戶
+  proxyUserId   Int?      // 如果是代理操作
+  entity        String    // 操作的實體類型
+  entityId      Int?      // 操作的實體 ID
+  action        String    // 操作類型
+  before        String?   // 操作前的狀態 (JSON)
+  after         String?   // 操作後的狀態 (JSON)
+  reason        String?   // 操作理由
+  createdAt     DateTime  @default(now())
+  
+  actor         User      @relation(fields: [actorUserId], references: [id])
+  proxy         User?     @relation("ProxyActions", fields: [proxyUserId], references: [id])
+}
+
+// ===== 枚舉定義 =====
+enum UserStatus {
+  ACTIVE
+  DISABLED
+  SUSPENDED
+}
+
+enum TagType {
+  GENRE       // 曲風
+  STYLE       // 風格
+  LANGUAGE    // 語言
+  ERA         // 年代
+}
+
+enum EventStatus {
+  PLANNED     // 計劃中
+  ACTIVE      // 進行中
+  COMPLETED   // 已完成
+  CANCELLED   // 已取消
 }
 
 enum RequestStatus {
-  PENDING
-  COMPLETED
-  CANCELLED
+  QUEUED      // 排隊中
+  ASSIGNED    // 已指派歌手
+  ACCEPTED    // 歌手已接受
+  DECLINED    // 歌手拒絕
+  PERFORMING  // 演唱中
+  COMPLETED   // 已完成
+  CANCELLED   // 已取消
+}
+
+enum WishSongStatus {
+  PENDING     // 待審核
+  APPROVED    // 已通過
+  REJECTED    // 已拒絕
+  ADDED       // 已加入歌庫
+}
+
+enum NotificationType {
+  SYSTEM      // 系統通知
+  REQUEST     // 點歌相關
+  WISH_SONG   // 願望歌相關  
+  EVENT       // 活動相關
+  PERSONAL    // 個人消息
 }

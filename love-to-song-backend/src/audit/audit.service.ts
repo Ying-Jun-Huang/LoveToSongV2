@@ -1,0 +1,450 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { AuthContext, PermissionService, ENTITIES, ACTIONS } from '../auth/rbac-abac.system';
+
+export interface CreateAuditLogDto {
+  action: string;
+  entityType: string;
+  entityId?: number;
+  userId: number;
+  ipAddress?: string;
+  userAgent?: string;
+  details?: Record<string, any>;
+  result?: 'SUCCESS' | 'FAILURE' | 'PARTIAL';
+  errorMessage?: string;
+}
+
+export interface AuditLogFilters {
+  userId?: number;
+  entityType?: string;
+  entityId?: number;
+  action?: string;
+  result?: string;
+  startDate?: Date;
+  endDate?: Date;
+  ipAddress?: string;
+  limit?: number;
+  offset?: number;
+}
+
+@Injectable()
+export class AuditService {
+  constructor(private prisma: PrismaService) {}
+
+  // 記錄稽核日誌
+  async logAction(logData: CreateAuditLogDto) {
+    try {
+      const auditLog = await this.prisma.auditLog.create({
+        data: {
+          action: logData.action,
+          entity: logData.entityType,
+          entityId: logData.entityId,
+          actorUserId: logData.userId,
+          before: logData.details ? JSON.stringify(logData.details) : null,
+          after: logData.errorMessage ? JSON.stringify({ error: logData.errorMessage }) : null,
+          reason: logData.errorMessage || 'System action'
+        },
+        include: {
+          actor: {
+            select: { id: true, displayName: true, email: true }
+          }
+        }
+      });
+
+      return auditLog;
+    } catch (error) {
+      // 稽核日誌記錄失敗不應影響主要業務邏輯
+      console.error('Failed to create audit log:', error);
+      return null;
+    }
+  }
+
+  // 批量記錄稽核日誌
+  async logBatchActions(logDataArray: CreateAuditLogDto[]) {
+    try {
+      const auditLogs = await this.prisma.auditLog.createMany({
+        data: logDataArray.map(logData => ({
+          action: logData.action,
+          entity: logData.entityType,
+          entityId: logData.entityId,
+          actorUserId: logData.userId,
+          before: logData.details ? JSON.stringify(logData.details) : null,
+          after: logData.errorMessage ? JSON.stringify({ error: logData.errorMessage }) : null,
+          reason: logData.errorMessage || 'System action'
+        }))
+      });
+
+      return auditLogs;
+    } catch (error) {
+      console.error('Failed to create batch audit logs:', error);
+      return null;
+    }
+  }
+
+  // 查詢稽核日誌
+  async getAuditLogs(authContext: AuthContext, filters: AuditLogFilters = {}) {
+    // 檢查查看稽核日誌的權限
+    if (!PermissionService.hasPermission(authContext, ENTITIES.AUDIT_LOG, ACTIONS.VIEW)) {
+      // 非管理員只能查看自己的操作記錄
+      if (!filters.userId || filters.userId !== authContext.userId) {
+        filters.userId = authContext.userId;
+      }
+    }
+
+    let whereClause: any = {};
+
+    // 應用篩選條件
+    if (filters.userId) {
+      whereClause.actorUserId = filters.userId;
+    }
+
+    if (filters.entityType) {
+      whereClause.entity = filters.entityType;
+    }
+
+    if (filters.entityId) {
+      whereClause.entityId = filters.entityId;
+    }
+
+    if (filters.action) {
+      whereClause.action = { contains: filters.action, mode: 'insensitive' };
+    }
+
+    if (filters.startDate || filters.endDate) {
+      whereClause.createdAt = {};
+      if (filters.startDate) {
+        whereClause.createdAt.gte = filters.startDate;
+      }
+      if (filters.endDate) {
+        whereClause.createdAt.lte = filters.endDate;
+      }
+    }
+
+    const limit = Math.min(filters.limit || 100, 1000); // 最多1000條
+    const offset = filters.offset || 0;
+
+    const [auditLogs, total] = await Promise.all([
+      this.prisma.auditLog.findMany({
+        where: whereClause,
+        include: {
+          actor: {
+            select: { id: true, displayName: true, email: true }
+          }
+        },
+        orderBy: { createdAt: 'desc' },
+        take: limit,
+        skip: offset
+      }),
+      this.prisma.auditLog.count({ where: whereClause })
+    ]);
+
+    return {
+      auditLogs: auditLogs.map(log => ({
+        ...log,
+        details: log.before ? JSON.parse(log.before) : null
+      })),
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasNext: offset + limit < total
+      }
+    };
+  }
+
+  // 獲取特定實體的稽核歷史
+  async getEntityAuditHistory(
+    authContext: AuthContext, 
+    entityType: string, 
+    entityId: number,
+    limit: number = 50
+  ) {
+    // 檢查權限
+    const resource = { entityType, entityId };
+    if (!PermissionService.hasPermission(authContext, ENTITIES.AUDIT_LOG, ACTIONS.VIEW, resource)) {
+      throw new Error('無權限查看該實體的稽核歷史');
+    }
+
+    const auditLogs = await this.prisma.auditLog.findMany({
+      where: {
+        entityType,
+        entityId
+      },
+      include: {
+        user: {
+          select: { id: true, displayName: true }
+        }
+      },
+      orderBy: { timestamp: 'desc' },
+      take: limit
+    });
+
+    return auditLogs.map(log => ({
+      ...log,
+      details: log.details ? JSON.parse(log.details) : null
+    }));
+  }
+
+  // 獲取用戶操作統計
+  async getUserActivityStats(authContext: AuthContext, targetUserId?: number, days: number = 30) {
+    const userId = targetUserId || authContext.userId;
+
+    // 檢查權限
+    if (userId !== authContext.userId && 
+        !PermissionService.hasPermission(authContext, ENTITIES.ANALYTICS, ACTIONS.VIEW)) {
+      throw new Error('無權限查看其他用戶的活動統計');
+    }
+
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+
+    const stats = await this.prisma.auditLog.groupBy({
+      by: ['action', 'result'],
+      where: {
+        userId,
+        timestamp: { gte: startDate }
+      },
+      _count: {
+        id: true
+      }
+    });
+
+    const dailyStats = await this.prisma.auditLog.groupBy({
+      by: ['timestamp'],
+      where: {
+        userId,
+        timestamp: { gte: startDate }
+      },
+      _count: {
+        id: true
+      }
+    });
+
+    // 處理每日統計數據
+    const dailyActivity = dailyStats.reduce((acc, stat) => {
+      const date = stat.timestamp.toISOString().split('T')[0];
+      acc[date] = (acc[date] || 0) + stat._count.id;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return {
+      totalActions: stats.reduce((sum, stat) => sum + stat._count.id, 0),
+      successfulActions: stats
+        .filter(stat => stat.result === 'SUCCESS')
+        .reduce((sum, stat) => sum + stat._count.id, 0),
+      failedActions: stats
+        .filter(stat => stat.result === 'FAILURE')
+        .reduce((sum, stat) => sum + stat._count.id, 0),
+      actionBreakdown: stats.reduce((acc, stat) => {
+        const key = `${stat.action}_${stat.result}`;
+        acc[key] = stat._count.id;
+        return acc;
+      }, {} as Record<string, number>),
+      dailyActivity,
+      period: { days, startDate, endDate: new Date() }
+    };
+  }
+
+  // 獲取系統稽核統計
+  async getSystemAuditStats(authContext: AuthContext, days: number = 30) {
+    // 檢查權限
+    if (!PermissionService.hasPermission(authContext, ENTITIES.ANALYTICS, ACTIONS.VIEW)) {
+      throw new Error('無權限查看系統稽核統計');
+    }
+
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+
+    const [
+      totalLogs,
+      entityStats,
+      actionStats,
+      userStats,
+      errorStats
+    ] = await Promise.all([
+      // 總日誌數
+      this.prisma.auditLog.count({
+        where: { timestamp: { gte: startDate } }
+      }),
+
+      // 按實體類型統計
+      this.prisma.auditLog.groupBy({
+        by: ['entityType'],
+        where: { timestamp: { gte: startDate } },
+        _count: { id: true }
+      }),
+
+      // 按操作類型統計
+      this.prisma.auditLog.groupBy({
+        by: ['action'],
+        where: { timestamp: { gte: startDate } },
+        _count: { id: true }
+      }),
+
+      // 活躍用戶統計
+      this.prisma.auditLog.groupBy({
+        by: ['userId'],
+        where: { timestamp: { gte: startDate } },
+        _count: { id: true }
+      }),
+
+      // 錯誤統計
+      this.prisma.auditLog.count({
+        where: {
+          timestamp: { gte: startDate },
+          result: 'FAILURE'
+        }
+      })
+    ]);
+
+    return {
+      summary: {
+        totalLogs,
+        errorRate: totalLogs > 0 ? ((errorStats / totalLogs) * 100).toFixed(2) + '%' : '0%',
+        activeUsers: userStats.length,
+        period: { days, startDate, endDate: new Date() }
+      },
+      entityBreakdown: entityStats.reduce((acc, stat) => {
+        acc[stat.entityType || 'unknown'] = stat._count.id;
+        return acc;
+      }, {} as Record<string, number>),
+      actionBreakdown: actionStats.reduce((acc, stat) => {
+        acc[stat.action] = stat._count.id;
+        return acc;
+      }, {} as Record<string, number>),
+      topUsers: userStats
+        .sort((a, b) => b._count.id - a._count.id)
+        .slice(0, 10)
+        .map(stat => ({
+          userId: stat.userId,
+          actionsCount: stat._count.id
+        }))
+    };
+  }
+
+  // 清理舊的稽核日誌
+  async cleanupOldLogs(authContext: AuthContext, retentionDays: number = 365) {
+    // 檢查權限
+    if (!PermissionService.hasPermission(authContext, ENTITIES.AUDIT_LOG, ACTIONS.DELETE)) {
+      throw new Error('無權限清理稽核日誌');
+    }
+
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - retentionDays);
+
+    const deletedCount = await this.prisma.auditLog.deleteMany({
+      where: {
+        timestamp: { lt: cutoffDate }
+      }
+    });
+
+    // 記錄清理操作
+    await this.logAction({
+      action: 'CLEANUP_AUDIT_LOGS',
+      entityType: 'AUDIT_LOG',
+      userId: authContext.userId,
+      details: {
+        retentionDays,
+        cutoffDate,
+        deletedCount: deletedCount.count
+      },
+      result: 'SUCCESS'
+    });
+
+    return {
+      message: '稽核日誌清理完成',
+      deletedCount: deletedCount.count,
+      retentionDays,
+      cutoffDate
+    };
+  }
+
+  // 導出稽核日誌
+  async exportAuditLogs(
+    authContext: AuthContext, 
+    filters: AuditLogFilters = {},
+    format: 'JSON' | 'CSV' = 'JSON'
+  ) {
+    // 檢查權限
+    if (!PermissionService.hasPermission(authContext, ENTITIES.AUDIT_LOG, ACTIONS.EXPORT)) {
+      throw new Error('無權限導出稽核日誌');
+    }
+
+    const result = await this.getAuditLogs(authContext, {
+      ...filters,
+      limit: 10000 // 導出時允許更多記錄
+    });
+
+    // 記錄導出操作
+    await this.logAction({
+      action: 'EXPORT_AUDIT_LOGS',
+      entityType: 'AUDIT_LOG',
+      userId: authContext.userId,
+      details: {
+        filters,
+        format,
+        recordCount: result.auditLogs.length
+      },
+      result: 'SUCCESS'
+    });
+
+    if (format === 'CSV') {
+      return this.convertToCSV(result.auditLogs);
+    }
+
+    return result;
+  }
+
+  // 將稽核日誌轉換為 CSV 格式
+  private convertToCSV(auditLogs: any[]): string {
+    if (auditLogs.length === 0) {
+      return 'No audit logs found';
+    }
+
+    const headers = [
+      'Timestamp', 'User', 'Action', 'Entity Type', 'Entity ID', 
+      'Result', 'IP Address', 'User Agent', 'Details'
+    ];
+
+    const csvRows = [headers.join(',')];
+
+    auditLogs.forEach(log => {
+      const row = [
+        log.timestamp.toISOString(),
+        log.user?.displayName || log.userId,
+        log.action,
+        log.entityType,
+        log.entityId || '',
+        log.result,
+        log.ipAddress || '',
+        log.userAgent || '',
+        JSON.stringify(log.details || {})
+      ].map(field => `"${String(field).replace(/"/g, '""')}"`);
+      
+      csvRows.push(row.join(','));
+    });
+
+    return csvRows.join('\n');
+  }
+
+  // 通用稽核裝飾器使用的輔助方法
+  static createAuditLogData(
+    action: string,
+    entityType: string,
+    authContext: AuthContext,
+    entityId?: number,
+    details?: Record<string, any>,
+    result: 'SUCCESS' | 'FAILURE' | 'PARTIAL' = 'SUCCESS',
+    errorMessage?: string
+  ): CreateAuditLogDto {
+    return {
+      action,
+      entityType,
+      entityId,
+      userId: authContext.userId,
+      details,
+      result,
+      errorMessage
+    };
+  }
+}

@@ -1,10 +1,19 @@
 import React from 'react';
 
-const WidgetControlPanel = ({ widgets, onToggleWidget, onResetLayout }) => {
+const WidgetControlPanel = ({ widgets, onToggleWidget, onResetLayout, layoutStats }) => {
   return (
     <div className="widget-control-panel">
       <div className="panel-header">
-        <h4>🎛️ 窗格控制</h4>
+        <div className="panel-title-section">
+          <h4>🎛️ 窗格控制</h4>
+          {layoutStats && (
+            <div className="layout-stats">
+              <small>
+                用戶: {layoutStats.currentUser} {layoutStats.hasLayout ? '🔖 已保存' : '📝 默認'}
+              </small>
+            </div>
+          )}
+        </div>
         <button onClick={onResetLayout} className="reset-btn">
           重設佈局
         </button>
@@ -32,7 +41,7 @@ const WidgetControlPanel = ({ widgets, onToggleWidget, onResetLayout }) => {
         .widget-control-panel {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
-          padding: 16px;
+          padding: 12px 16px;
           border-radius: 12px;
           margin-bottom: 20px;
           box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -42,7 +51,19 @@ const WidgetControlPanel = ({ widgets, onToggleWidget, onResetLayout }) => {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 16px;
+          margin-bottom: 12px;
+        }
+
+        .panel-title-section {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .layout-stats {
+          opacity: 0.8;
+          font-size: 11px;
+          color: rgba(255,255,255,0.8);
         }
 
         .panel-header h4 {
@@ -68,19 +89,22 @@ const WidgetControlPanel = ({ widgets, onToggleWidget, onResetLayout }) => {
         }
 
         .widget-toggles {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-          gap: 12px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          align-items: center;
         }
 
         .widget-toggle {
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 8px 12px;
+          gap: 8px;
+          padding: 6px 12px;
           background: rgba(255,255,255,0.1);
-          border-radius: 8px;
+          border-radius: 20px;
           transition: background 0.3s ease;
+          white-space: nowrap;
+          flex-shrink: 0;
         }
 
         .widget-toggle:hover {
@@ -90,8 +114,8 @@ const WidgetControlPanel = ({ widgets, onToggleWidget, onResetLayout }) => {
         .toggle-switch {
           position: relative;
           display: inline-block;
-          width: 44px;
-          height: 24px;
+          width: 36px;
+          height: 20px;
           flex-shrink: 0;
         }
 
@@ -110,14 +134,14 @@ const WidgetControlPanel = ({ widgets, onToggleWidget, onResetLayout }) => {
           bottom: 0;
           background-color: rgba(255,255,255,0.3);
           transition: 0.3s;
-          border-radius: 24px;
+          border-radius: 20px;
         }
 
         .slider:before {
           position: absolute;
           content: "";
-          height: 18px;
-          width: 18px;
+          height: 14px;
+          width: 14px;
           left: 3px;
           bottom: 3px;
           background-color: white;
@@ -131,13 +155,44 @@ const WidgetControlPanel = ({ widgets, onToggleWidget, onResetLayout }) => {
         }
 
         input:checked + .slider:before {
-          transform: translateX(20px);
+          transform: translateX(16px);
         }
 
         .widget-label {
           font-size: 13px;
           font-weight: 500;
           white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+          .widget-toggles {
+            justify-content: center;
+            gap: 6px;
+          }
+          
+          .widget-toggle {
+            padding: 4px 8px;
+            gap: 6px;
+          }
+          
+          .widget-label {
+            font-size: 12px;
+          }
+          
+          .panel-header {
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 8px;
+          }
+          
+          .panel-header h4 {
+            font-size: 14px;
+          }
+          
+          .reset-btn {
+            font-size: 11px;
+            padding: 4px 8px;
+          }
         }
       `}</style>
     </div>

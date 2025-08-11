@@ -11,6 +11,8 @@ const SongListWidget = (props) => {
   const [sortBy, setSortBy] = useState('title');
   const [categories, setCategories] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [categoryMode, setCategoryMode] = useState('existing'); // 'existing' or 'new'
+  const [customCategory, setCustomCategory] = useState('');
 
   // Fetch songs on component mount
   useEffect(() => {
@@ -55,13 +57,19 @@ const SongListWidget = (props) => {
       const response = await api.get('/songs');
       setSongs(response.data);
       
-      // Extract unique categories
-      const uniqueCategories = [...new Set(
+      // Extract unique categories and add some predefined ones
+      const songCategories = [...new Set(
         response.data
           .map(song => song.category)
           .filter(cat => cat && cat.trim() !== '')
       )];
-      setCategories(uniqueCategories);
+      
+      // 預設分類
+      const predefinedCategories = ['流行', '抒情', '搖滾', '民謠', '爵士', '藍調', '鄉村', '古典', 'R&B', '電子', '雷鬼', '金屬'];
+      
+      // 合併並排序分類
+      const allCategories = [...new Set([...predefinedCategories, ...songCategories])].sort();
+      setCategories(allCategories);
       
     } catch (error) {
       console.error('Failed to fetch songs:', error);
@@ -75,14 +83,28 @@ const SongListWidget = (props) => {
     if (!newSong.title.trim()) return;
 
     try {
-      const response = await api.post('/songs', newSong);
+      // 決定要使用的分類
+      const finalCategory = categoryMode === 'new' ? customCategory.trim() : newSong.category;
+      
+      const songData = {
+        title: newSong.title,
+        artist: newSong.artist,
+        category: finalCategory
+      };
+
+      const response = await api.post('/songs', songData);
       setSongs([...songs, response.data]);
+      
+      // 重置表單
       setNewSong({ title: '', artist: '', category: '' });
+      setCustomCategory('');
+      setCategoryMode('existing');
       setShowAddForm(false);
       
       // Update categories if new category was added
-      if (newSong.category && !categories.includes(newSong.category)) {
-        setCategories([...categories, newSong.category]);
+      if (finalCategory && !categories.includes(finalCategory)) {
+        const updatedCategories = [...categories, finalCategory].sort();
+        setCategories(updatedCategories);
       }
     } catch (error) {
       console.error('Failed to add song:', error);
@@ -169,18 +191,49 @@ const SongListWidget = (props) => {
             />
           </div>
           <div className="form-row">
-            <input
-              type="text"
-              placeholder="分類"
-              value={newSong.category}
-              onChange={(e) => setNewSong({ ...newSong, category: e.target.value })}
-              list="categories"
-            />
-            <datalist id="categories">
-              {categories.map(cat => (
-                <option key={cat} value={cat} />
-              ))}
-            </datalist>
+            <div className="category-section">
+              <div className="category-mode-selector">
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    value="existing"
+                    checked={categoryMode === 'existing'}
+                    onChange={(e) => setCategoryMode(e.target.value)}
+                  />
+                  選擇現有分類
+                </label>
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    value="new"
+                    checked={categoryMode === 'new'}
+                    onChange={(e) => setCategoryMode(e.target.value)}
+                  />
+                  創建新分類
+                </label>
+              </div>
+              
+              {categoryMode === 'existing' ? (
+                <select
+                  value={newSong.category}
+                  onChange={(e) => setNewSong({ ...newSong, category: e.target.value })}
+                  className="category-select"
+                >
+                  <option value="">請選擇分類</option>
+                  {categories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  placeholder="輸入新分類名稱"
+                  value={customCategory}
+                  onChange={(e) => setCustomCategory(e.target.value)}
+                  className="category-input"
+                />
+              )}
+            </div>
           </div>
           <div className="form-actions">
             <button type="submit">新增歌曲</button>
@@ -238,6 +291,7 @@ const SongListWidget = (props) => {
           display: flex;
           flex-direction: column;
           overflow: hidden;
+          color: #ffffff;
         }
         
         .widget-header {
@@ -245,26 +299,30 @@ const SongListWidget = (props) => {
           justify-content: space-between;
           align-items: center;
           margin-bottom: 20px;
-          border-bottom: 2px solid #f0f0f0;
+          border-bottom: 2px solid #daa520;
           padding-bottom: 10px;
         }
         
         .widget-header h3 {
           margin: 0;
-          color: #333;
+          color: #ffd700;
+          font-weight: 600;
         }
         
         .add-song-btn {
           padding: 8px 16px;
-          background: #007bff;
+          background: linear-gradient(135deg, #daa520, #b8860b);
           color: white;
-          border: none;
+          border: 1px solid #daa520;
           border-radius: 4px;
           cursor: pointer;
+          transition: all 0.2s ease;
         }
         
         .add-song-btn:hover {
-          background: #0056b3;
+          background: linear-gradient(135deg, #b8860b, #9a7209);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(218, 165, 32, 0.3);
         }
         
         .song-controls {
@@ -278,9 +336,23 @@ const SongListWidget = (props) => {
         .search-input {
           width: 100%;
           padding: 8px 12px;
-          border: 1px solid #ddd;
+          border: 1px solid #daa520;
           border-radius: 4px;
           font-size: 14px;
+          background: linear-gradient(135deg, #333333, #404040);
+          color: #ffffff;
+          transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+          outline: none;
+          border-color: #ffd700;
+          box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+          background: linear-gradient(135deg, #404040, #4a4a4a);
+        }
+        
+        .search-input::placeholder {
+          color: #aaaaaa;
         }
         
         .filter-section {
@@ -290,19 +362,29 @@ const SongListWidget = (props) => {
         
         .category-filter, .sort-select {
           padding: 6px 10px;
-          border: 1px solid #ddd;
+          border: 1px solid #daa520;
           border-radius: 4px;
-          background: white;
+          background: linear-gradient(135deg, #333333, #404040);
+          color: #ffffff;
           font-size: 14px;
           flex: 1;
+          transition: all 0.2s ease;
+        }
+        
+        .category-filter:focus, .sort-select:focus {
+          outline: none;
+          border-color: #ffd700;
+          box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+          background: linear-gradient(135deg, #404040, #4a4a4a);
         }
         
         .add-song-form {
-          background: #f8f9fa;
+          background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
           padding: 15px;
           border-radius: 8px;
           margin-bottom: 20px;
-          border: 1px solid #e9ecef;
+          border: 1px solid #daa520;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.1);
         }
         
         .form-row {
@@ -314,9 +396,23 @@ const SongListWidget = (props) => {
         .form-row input {
           flex: 1;
           padding: 8px 12px;
-          border: 1px solid #ddd;
+          border: 1px solid #daa520;
           border-radius: 4px;
           font-size: 14px;
+          background: linear-gradient(135deg, #333333, #404040);
+          color: #ffffff;
+          transition: all 0.2s ease;
+        }
+        
+        .form-row input:focus {
+          outline: none;
+          border-color: #ffd700;
+          box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+          background: linear-gradient(135deg, #404040, #4a4a4a);
+        }
+        
+        .form-row input::placeholder {
+          color: #aaaaaa;
         }
         
         .form-actions {
@@ -326,15 +422,70 @@ const SongListWidget = (props) => {
         
         .form-actions button {
           padding: 8px 16px;
-          background: #28a745;
+          background: linear-gradient(135deg, #daa520, #b8860b);
           color: white;
-          border: none;
+          border: 1px solid #daa520;
           border-radius: 4px;
           cursor: pointer;
+          transition: all 0.2s ease;
+          font-weight: 600;
         }
         
         .form-actions button:hover {
-          background: #218838;
+          background: linear-gradient(135deg, #b8860b, #9a7209);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(218, 165, 32, 0.3);
+        }
+        
+        .category-section {
+          width: 100%;
+        }
+        
+        .category-mode-selector {
+          display: flex;
+          gap: 20px;
+          margin-bottom: 10px;
+          padding: 8px;
+          background: linear-gradient(135deg, #404040, #4a4a4a);
+          border: 1px solid #daa520;
+          border-radius: 4px;
+          box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.1);
+        }
+        
+        .radio-option {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          cursor: pointer;
+          font-size: 14px;
+          color: #ffffff;
+          font-weight: 500;
+        }
+        
+        .radio-option input[type="radio"] {
+          margin: 0;
+        }
+        
+        .category-select, .category-input {
+          width: 100%;
+          padding: 8px 12px;
+          border: 1px solid #daa520;
+          border-radius: 4px;
+          font-size: 14px;
+          background: linear-gradient(135deg, #333333, #404040);
+          color: #ffffff;
+          transition: all 0.2s ease;
+        }
+        
+        .category-select:focus, .category-input:focus {
+          outline: none;
+          border-color: #ffd700;
+          box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.25);
+          background: linear-gradient(135deg, #404040, #4a4a4a);
+        }
+        
+        .category-input::placeholder {
+          color: #aaaaaa;
         }
         
         .songs-list {
@@ -344,7 +495,7 @@ const SongListWidget = (props) => {
         
         .loading, .empty-state {
           text-align: center;
-          color: #666;
+          color: #cccccc;
           padding: 40px 0;
           font-style: italic;
         }
@@ -356,18 +507,34 @@ const SongListWidget = (props) => {
         }
         
         .song-card {
-          border: 1px solid #e0e0e0;
+          border: 1px solid #daa520;
           border-radius: 8px;
           padding: 15px;
-          background: white;
+          background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          transition: box-shadow 0.2s ease;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.1);
+          position: relative;
+          overflow: hidden;
         }
         
         .song-card:hover {
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 25px rgba(218, 165, 32, 0.2);
+          border-color: #ffd700;
+          transform: translateY(-2px);
+        }
+        
+        .song-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #daa520, transparent);
+          opacity: 0.5;
         }
         
         .song-info {
@@ -377,29 +544,32 @@ const SongListWidget = (props) => {
         .song-title {
           font-weight: bold;
           margin-bottom: 5px;
-          color: #333;
+          color: #ffd700;
           font-size: 16px;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .song-artist {
-          color: #666;
+          color: #cccccc;
           font-size: 14px;
           margin-bottom: 8px;
         }
         
         .song-category {
-          background: #e3f2fd;
-          color: #1976d2;
+          background: linear-gradient(135deg, #daa520, #b8860b);
+          color: #ffffff;
           padding: 3px 8px;
           border-radius: 12px;
           font-size: 12px;
           display: inline-block;
           margin-bottom: 8px;
+          font-weight: 500;
+          box-shadow: 0 2px 4px rgba(218, 165, 32, 0.3);
         }
         
         .song-date {
           font-size: 12px;
-          color: #999;
+          color: #aaaaaa;
         }
         
         .song-actions {
@@ -408,17 +578,20 @@ const SongListWidget = (props) => {
         
         .delete-btn {
           padding: 4px 8px;
-          background: #dc3545;
+          background: linear-gradient(135deg, #dc3545, #c82333);
           color: white;
-          border: none;
+          border: 1px solid #dc3545;
           border-radius: 4px;
           cursor: pointer;
           font-size: 14px;
           font-weight: bold;
+          transition: all 0.2s ease;
         }
         
         .delete-btn:hover {
-          background: #c82333;
+          background: linear-gradient(135deg, #c82333, #a71e2a);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
         }
       `}</style>
     </div>

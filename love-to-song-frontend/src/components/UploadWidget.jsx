@@ -336,17 +336,19 @@ const UploadWidget = () => {
           display: flex;
           flex-direction: column;
           overflow: auto;
+          color: #ffffff;
         }
 
         .widget-header {
           margin-bottom: 20px;
-          border-bottom: 2px solid #f0f0f0;
+          border-bottom: 2px solid #daa520;
           padding-bottom: 10px;
         }
 
         .widget-header h3 {
           margin: 0;
-          color: #333;
+          color: #ffd700;
+          font-weight: 600;
         }
 
         .upload-controls {
@@ -365,13 +367,16 @@ const UploadWidget = () => {
           gap: 8px;
           cursor: pointer;
           font-weight: bold;
+          color: #ffffff;
         }
 
         .upload-section {
-          background: #f8f9fa;
+          background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
           padding: 15px;
           border-radius: 8px;
           margin-bottom: 20px;
+          border: 1px solid #daa520;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.1);
         }
 
         .file-input {
@@ -385,16 +390,19 @@ const UploadWidget = () => {
         .file-input-label {
           display: inline-block;
           padding: 10px 20px;
-          background: #007bff;
+          background: linear-gradient(135deg, #daa520, #b8860b);
           color: white;
           border-radius: 4px;
           cursor: pointer;
-          border: 1px solid #007bff;
-          transition: background-color 0.2s;
+          border: 1px solid #daa520;
+          transition: all 0.2s ease;
+          font-weight: 600;
         }
 
         .file-input-label:hover {
-          background: #0056b3;
+          background: linear-gradient(135deg, #b8860b, #9a7209);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(218, 165, 32, 0.3);
         }
 
         .photo-upload-section {
@@ -407,26 +415,39 @@ const UploadWidget = () => {
           display: block;
           margin-bottom: 5px;
           font-weight: bold;
+          color: #ffd700;
         }
 
         .player-select {
           width: 100%;
           padding: 8px 12px;
-          border: 1px solid #ddd;
+          border: 1px solid #daa520;
           border-radius: 4px;
           font-size: 14px;
+          background: linear-gradient(135deg, #333333, #404040);
+          color: #ffffff;
+          transition: all 0.2s ease;
+        }
+        
+        .player-select:focus {
+          outline: none;
+          border-color: #ffd700;
+          box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+          background: linear-gradient(135deg, #404040, #4a4a4a);
         }
 
         .upload-info {
-          background: #e3f2fd;
+          background: linear-gradient(135deg, #404040 0%, #4a4a4a 100%);
           padding: 15px;
           border-radius: 6px;
           margin-bottom: 15px;
+          border: 1px solid rgba(218, 165, 32, 0.3);
+          box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.1);
         }
 
         .upload-info h4 {
           margin: 0 0 10px 0;
-          color: #1976d2;
+          color: #ffd700;
         }
 
         .upload-info ul {
@@ -437,6 +458,7 @@ const UploadWidget = () => {
         .upload-info li {
           margin-bottom: 5px;
           font-size: 14px;
+          color: #cccccc;
         }
 
         .action-buttons {
@@ -446,55 +468,67 @@ const UploadWidget = () => {
 
         .upload-btn, .export-btn {
           padding: 10px 20px;
-          background: #28a745;
+          background: linear-gradient(135deg, #daa520, #b8860b);
           color: white;
-          border: none;
+          border: 1px solid #daa520;
           border-radius: 4px;
           cursor: pointer;
           font-size: 14px;
           font-weight: bold;
+          transition: all 0.2s ease;
         }
 
         .export-btn {
-          background: #17a2b8;
+          background: linear-gradient(135deg, #17a2b8, #138496);
+          border-color: #17a2b8;
         }
 
         .upload-btn:hover {
-          background: #218838;
+          background: linear-gradient(135deg, #b8860b, #9a7209);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(218, 165, 32, 0.3);
         }
 
         .export-btn:hover {
-          background: #138496;
+          background: linear-gradient(135deg, #138496, #117a8b);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
         }
 
         .upload-btn:disabled, .export-btn:disabled {
-          background: #6c757d;
+          background: linear-gradient(135deg, #666666, #555555);
           cursor: not-allowed;
+          border-color: #666666;
         }
 
         .export-section {
-          background: #f8f9fa;
+          background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
           padding: 15px;
           border-radius: 8px;
           margin-bottom: 20px;
+          border: 1px solid #daa520;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.1);
         }
 
         .export-section h4 {
           margin: 0 0 10px 0;
-          color: #333;
+          color: #ffd700;
+          font-weight: 600;
         }
 
         .upload-results {
-          background: #d4edda;
-          border: 1px solid #c3e6cb;
+          background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
+          border: 1px solid #daa520;
           border-radius: 6px;
           padding: 15px;
           margin-top: 15px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.1);
         }
 
         .upload-results h4 {
           margin: 0 0 15px 0;
-          color: #155724;
+          color: #ffd700;
+          font-weight: 600;
         }
 
         .result-summary {
@@ -512,34 +546,41 @@ const UploadWidget = () => {
 
         .result-item .label {
           font-weight: bold;
+          color: #cccccc;
         }
 
         .result-item .value {
-          background: white;
+          background: linear-gradient(135deg, #404040, #4a4a4a);
           padding: 4px 8px;
           border-radius: 4px;
           font-weight: bold;
+          color: #ffd700;
+          border: 1px solid rgba(218, 165, 32, 0.3);
         }
 
         .result-item.success .value {
           color: #28a745;
+          border-color: rgba(40, 167, 69, 0.5);
         }
 
         .result-item.error .value {
           color: #dc3545;
+          border-color: rgba(220, 53, 69, 0.5);
         }
 
         .error-details {
-          background: #f8d7da;
-          border: 1px solid #f5c6cb;
+          background: linear-gradient(135deg, #3a2a2a 0%, #4d3d3d 100%);
+          border: 1px solid rgba(220, 53, 69, 0.5);
           border-radius: 4px;
           padding: 15px;
           margin-top: 15px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .error-details h5 {
           margin: 0 0 10px 0;
-          color: #721c24;
+          color: #ff6b6b;
+          font-weight: 600;
         }
 
         .error-list {
@@ -549,14 +590,15 @@ const UploadWidget = () => {
 
         .error-item {
           padding: 5px 0;
-          border-bottom: 1px solid #f5c6cb;
+          border-bottom: 1px solid rgba(220, 53, 69, 0.3);
           font-size: 14px;
+          color: #ffffff;
         }
 
         .more-errors {
           padding: 10px 0;
           font-style: italic;
-          color: #721c24;
+          color: #ff9999;
         }
       `}</style>
     </div>

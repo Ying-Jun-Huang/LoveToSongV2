@@ -1,18 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import api from '../services/api';
-import { usePermissions } from '../hooks/usePermissions';
 
 const HomepageWidget = () => {
-  const { user, permissions, getRoleInfo } = usePermissions();
-  const [singerInfo, setSingerInfo] = useState({
-    name: '',
-    description: '',
-    avatar: null,
-    totalSongs: 0,
-    totalPerformances: 0,
-  });
-  const [featuredPlayers, setFeaturedPlayers] = useState([]);
-  const [recentActivities, setRecentActivities] = useState([]);
+  const [featuredSingers, setFeaturedSingers] = useState([]);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [systemStats, setSystemStats] = useState({
     totalPlayers: 0,
     totalSongs: 0,
@@ -20,14 +10,10 @@ const HomepageWidget = () => {
     onlineUsers: 0,
   });
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [profileForm, setProfileForm] = useState({
-    name: '',
-    description: '',
-  });
 
   useEffect(() => {
-    fetchHomepageData();
+    // 所有用戶都使用相同的首頁內容
+    fetchUnifiedHomepageData();
     
     // 每秒更新時間
     const timeInterval = setInterval(() => {
@@ -36,8 +22,9 @@ const HomepageWidget = () => {
 
     // 每30秒更新數據
     const dataInterval = setInterval(() => {
+      fetchFeaturedSingers();
+      fetchUpcomingEvents();
       fetchSystemStats();
-      fetchRecentActivities();
     }, 30000);
 
     return () => {
@@ -46,106 +33,119 @@ const HomepageWidget = () => {
     };
   }, []);
 
-  const fetchHomepageData = async () => {
-    try {
-      await Promise.all([
-        fetchSingerInfo(),
-        fetchFeaturedPlayers(),
-        fetchSystemStats(),
-        fetchRecentActivities(),
-      ]);
-    } catch (error) {
-      console.error('Failed to fetch homepage data:', error);
-    }
-  };
-
-  const fetchSingerInfo = async () => {
-    try {
-      const userResponse = await api.get('/users/me');
-      const songsResponse = await api.get('/songs/my');
-      const statsResponse = await api.get('/song-requests/stats');
-      
-      setSingerInfo({
-        name: userResponse.data.username || '歌手',
-        description: userResponse.data.description || '歡迎來到我的歌唱世界！',
-        avatar: userResponse.data.avatar,
-        totalSongs: songsResponse.data.length || 0,
-        totalPerformances: statsResponse.data.totalCompleted || 0,
-      });
-
-      setProfileForm({
-        name: userResponse.data.username || '',
-        description: userResponse.data.description || '歡迎來到我的歌唱世界！',
-      });
-    } catch (error) {
-      console.error('Failed to fetch singer info:', error);
-      // 設置默認值避免組件崩潰
-      setSingerInfo({
-        name: '歌手',
-        description: '歡迎來到點歌系統',
-        avatar: null,
-        totalSongs: 0,
-        totalPerformances: 0,
-      });
-    }
-  };
-
-  const fetchFeaturedPlayers = async () => {
-    try {
-      const response = await api.get('/players');
-      // 取最活躍的前6位玩家
-      const sortedPlayers = response.data
-        .sort((a, b) => b.songCount - a.songCount)
-        .slice(0, 6);
-      setFeaturedPlayers(sortedPlayers);
-    } catch (error) {
-      console.error('Failed to fetch featured players:', error);
-    }
-  };
 
   const fetchSystemStats = async () => {
     try {
-      const [playersResponse, songsResponse, requestsResponse] = await Promise.all([
-        api.get('/players/stats'),
-        api.get('/songs'),
-        api.get('/song-requests/stats'),
-      ]);
-
+      // 使用模擬數據
       setSystemStats({
-        totalPlayers: playersResponse.data.totalPlayers || 0,
-        totalSongs: songsResponse.data.length || 0,
-        todayRequests: requestsResponse.data.totalCompleted || 0,
-        onlineUsers: Math.floor(Math.random() * 10) + 1, // 模擬在線用戶
+        totalPlayers: 156,
+        totalSongs: 1250,
+        todayRequests: 42,
+        onlineUsers: Math.floor(Math.random() * 15) + 5, // 模擬在線用戶
       });
     } catch (error) {
       console.error('Failed to fetch system stats:', error);
     }
   };
 
-  const fetchRecentActivities = async () => {
+
+  // 統一首頁數據獲取
+  const fetchUnifiedHomepageData = async () => {
     try {
-      const response = await api.get('/song-requests?limit=10&status=COMPLETED');
-      setRecentActivities(response.data.requests || []);
+      await Promise.all([
+        fetchFeaturedSingers(),
+        fetchUpcomingEvents(),
+        fetchSystemStats(),
+      ]);
     } catch (error) {
-      console.error('Failed to fetch recent activities:', error);
+      console.error('Failed to fetch homepage data:', error);
     }
   };
 
-  const updateProfile = async (e) => {
-    e.preventDefault();
+  // 獲取推薦歌手
+  const fetchFeaturedSingers = async () => {
     try {
-      await api.patch('/users/me', profileForm);
-      setSingerInfo(prev => ({
-        ...prev,
-        name: profileForm.name,
-        description: profileForm.description,
-      }));
-      setIsEditingProfile(false);
+      // 模擬推薦歌手數據
+      const mockFeaturedSingers = [
+        {
+          id: 1,
+          name: '張小美',
+          genre: ['流行', '抒情'],
+          avatar: '👩‍🎤',
+          color: '#ff6b9d',
+          songsCount: 45,
+          rating: 4.8,
+          description: '溫柔嗓音，擅長抒情歌曲'
+        },
+        {
+          id: 2,
+          name: '李搖滾',
+          genre: ['搖滾', '流行'],
+          avatar: '🎸',
+          color: '#4ecdc4',
+          songsCount: 38,
+          rating: 4.7,
+          description: '搖滾魂，熱愛現場演出'
+        },
+        {
+          id: 3,
+          name: '王民謠',
+          genre: ['民謠', '鄉村'],
+          avatar: '🎻',
+          color: '#45b7d1',
+          songsCount: 52,
+          rating: 4.9,
+          description: '吉他詩人，原創民謠'
+        }
+      ];
+      setFeaturedSingers(mockFeaturedSingers);
     } catch (error) {
-      console.error('Failed to update profile:', error);
-      alert('更新個人資料失敗');
+      console.error('Failed to fetch featured singers:', error);
     }
   };
+
+  // 獲取即將到來的活動
+  const fetchUpcomingEvents = async () => {
+    try {
+      // 模擬活動數據
+      const mockEvents = [
+        {
+          id: 1,
+          title: '週末音樂夜',
+          date: '2024-01-20',
+          time: '19:00',
+          location: '咖啡廳',
+          type: '現場演出',
+          description: '多位歌手現場演唱，歡迎大家來欣賞！',
+          participants: 5
+        },
+        {
+          id: 2,
+          title: '新歌發表會',
+          date: '2024-01-25',
+          time: '20:00',
+          location: '小型演出廳',
+          type: '新歌首唱',
+          description: '張小美最新創作歌曲首次演唱',
+          participants: 1
+        },
+        {
+          id: 3,
+          title: '民謠之夜',
+          date: '2024-01-28',
+          time: '18:30',
+          location: '戶外舞台',
+          type: '主題演出',
+          description: '民謠愛好者聚會，分享原創作品',
+          participants: 3
+        }
+      ];
+      setUpcomingEvents(mockEvents);
+    } catch (error) {
+      console.error('Failed to fetch upcoming events:', error);
+    }
+  };
+
 
   const formatTime = (date) => {
     return date.toLocaleString('zh-TW', {
@@ -172,7 +172,9 @@ const HomepageWidget = () => {
       <div className="header-section">
         <div className="time-display">
           <div className="current-time">{formatTime(currentTime)}</div>
-          <div className="greeting">{getGreeting()}，{singerInfo.name || '用戶'}！</div>
+          <div className="greeting">
+            {`${getGreeting()}，歡迎來到點歌系統！`}
+          </div>
         </div>
         <div className="system-status">
           <span className="status-indicator online"></span>
@@ -180,103 +182,64 @@ const HomepageWidget = () => {
         </div>
       </div>
 
-      {/* 歌手資訊卡片 */}
-      <div className="singer-profile">
-        <div className="profile-header">
-          <div className="avatar-section">
-            {singerInfo.avatar ? (
-              <img src={singerInfo.avatar} alt="歌手頭像" className="singer-avatar" />
-            ) : (
-              <div className="avatar-placeholder">
-                {singerInfo.name ? singerInfo.name.charAt(0) : '?'}
+      {/* 推薦歌手 */}
+      <div className="featured-singers-section">
+        <h3>🌟 推薦歌手</h3>
+        <div className="singers-grid">
+          {featuredSingers.map(singer => (
+            <div key={singer.id} className="featured-singer-card">
+              <div className="singer-avatar" style={{ backgroundColor: singer.color }}>
+                <span className="avatar-emoji">{singer.avatar}</span>
               </div>
-            )}
-          </div>
-          <div className="profile-info">
-            <div className="profile-header-info">
-              <h2 className="singer-name">{singerInfo.name || '歌手'}</h2>
-              {user && (
-                <div 
-                  className="user-role-badge"
-                  style={{ backgroundColor: getRoleInfo(user.role).color }}
-                >
-                  {getRoleInfo(user.role).name}
+              <div className="singer-info">
+                <h4 className="singer-name">{singer.name}</h4>
+                <div className="singer-genres">
+                  {singer.genre.map((genre, index) => (
+                    <span key={index} className="genre-tag">{genre}</span>
+                  ))}
                 </div>
-              )}
-            </div>
-            <p className="singer-description">{singerInfo.description || '歡迎來到點歌系統'}</p>
-            
-            {/* 權限資訊 */}
-            {user && (
-              <div className="permissions-info">
-                <h4>權限範圍</h4>
-                <div className="permission-badges">
-                  {permissions.canManageUsers && <span className="permission-badge admin">用戶管理</span>}
-                  {permissions.canManageContent && <span className="permission-badge admin">內容管理</span>}
-                  {permissions.canManagePlayers && <span className="permission-badge manager">玩家管理</span>}
-                  {permissions.canManageSongs && <span className="permission-badge manager">歌曲管理</span>}
-                  {permissions.canRequestSongs && <span className="permission-badge user">點歌功能</span>}
-                  {permissions.canViewOnly && <span className="permission-badge guest">瀏覽權限</span>}
+                <div className="singer-stats">
+                  <span className="rating">⭐ {singer.rating}</span>
+                  <span className="songs-count">{singer.songsCount} 首歌</span>
                 </div>
-              </div>
-            )}
-            
-            <div className="singer-stats">
-              <div className="stat-item">
-                <span className="stat-number">{singerInfo.totalSongs}</span>
-                <span className="stat-label">首歌曲</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">{singerInfo.totalPerformances}</span>
-                <span className="stat-label">次演出</span>
+                <p className="singer-description">{singer.description}</p>
               </div>
             </div>
-          </div>
-          <button
-            onClick={() => setIsEditingProfile(!isEditingProfile)}
-            className="edit-profile-btn"
-          >
-            {isEditingProfile ? '取消' : '編輯'}
-          </button>
+          ))}
         </div>
+      </div>
 
-        {isEditingProfile && (
-          <form onSubmit={updateProfile} className="profile-edit-form">
-            <div className="form-row">
-              <label>歌手名稱:</label>
-              <input
-                type="text"
-                value={profileForm.name}
-                onChange={(e) => setProfileForm({...profileForm, name: e.target.value})}
-                required
-              />
+      {/* 即將到來的活動 */}
+      <div className="upcoming-events-section">
+        <h3>📅 即將到來的活動</h3>
+        <div className="events-list">
+          {upcomingEvents.map(event => (
+            <div key={event.id} className="event-card">
+              <div className="event-date">
+                <div className="date">{new Date(event.date).getDate()}</div>
+                <div className="month">{new Date(event.date).toLocaleDateString('zh-TW', { month: 'short' })}</div>
+              </div>
+              <div className="event-info">
+                <h4 className="event-title">{event.title}</h4>
+                <div className="event-meta">
+                  <span className="event-time">🕐 {event.time}</span>
+                  <span className="event-location">📍 {event.location}</span>
+                  <span className="event-type">🎪 {event.type}</span>
+                </div>
+                <p className="event-description">{event.description}</p>
+                <div className="event-participants">
+                  {event.participants} 位歌手參與
+                </div>
+              </div>
             </div>
-            <div className="form-row">
-              <label>個人簡介:</label>
-              <textarea
-                value={profileForm.description}
-                onChange={(e) => setProfileForm({...profileForm, description: e.target.value})}
-                rows="3"
-              />
-            </div>
-            <div className="form-actions">
-              <button type="submit">保存</button>
-            </div>
-          </form>
-        )}
+          ))}
+        </div>
       </div>
 
       {/* 系統統計 */}
       <div className="system-stats">
-        <h3>今日概況</h3>
+        <h3>系統概況</h3>
         <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-icon players-icon">👥</div>
-            <div className="stat-content">
-              <div className="stat-number">{systemStats.totalPlayers}</div>
-              <div className="stat-label">總玩家數</div>
-            </div>
-          </div>
           <div className="stat-card">
             <div className="stat-icon songs-icon">🎵</div>
             <div className="stat-content">
@@ -301,67 +264,6 @@ const HomepageWidget = () => {
         </div>
       </div>
 
-      {/* 精選玩家 */}
-      <div className="featured-players">
-        <h3>活躍玩家</h3>
-        {featuredPlayers.length === 0 ? (
-          <div className="empty-state">暫無玩家資料</div>
-        ) : (
-          <div className="players-grid">
-            {featuredPlayers.map(player => (
-              <div key={player.id} className="player-card">
-                <div className="player-avatar">
-                  {player.photoPath ? (
-                    <img src={player.photoPath} alt={player.name} />
-                  ) : (
-                    <div className="avatar-placeholder">
-                      {player.name ? player.name.charAt(0) : '?'}
-                    </div>
-                  )}
-                </div>
-                <div className="player-info">
-                  <div className="player-name">{player.name}</div>
-                  <div className="player-id">{player.playerId}</div>
-                  <div className="player-stats">
-                    <span className="song-count">{player.songCount} 首點歌</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* 最近活動 */}
-      <div className="recent-activities">
-        <h3>最近演出</h3>
-        {recentActivities.length === 0 ? (
-          <div className="empty-state">暫無演出記錄</div>
-        ) : (
-          <div className="activities-list">
-            {recentActivities.slice(0, 5).map(activity => (
-              <div key={activity.id} className="activity-item">
-                <div className="activity-time">
-                  {new Date(activity.completedAt || activity.requestedAt).toLocaleTimeString('zh-TW', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </div>
-                <div className="activity-content">
-                  <div className="activity-song">{activity.song?.title}</div>
-                  <div className="activity-player">
-                    {activity.player?.name || activity.user?.username}
-                  </div>
-                </div>
-                <div className="activity-status">
-                  {activity.status === 'COMPLETED' ? '✅' : '⏳'}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
       <style jsx="true">{`
         .homepage-widget {
           background: transparent;
@@ -374,6 +276,7 @@ const HomepageWidget = () => {
           flex-direction: column;
           gap: 24px;
           overflow-y: auto;
+          color: #ffffff;
         }
 
         .header-section {
@@ -381,9 +284,11 @@ const HomepageWidget = () => {
           justify-content: space-between;
           align-items: center;
           padding: 16px 20px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
+          background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+          color: #ffd700;
           border-radius: 12px;
+          border: 1px solid #ffd700;
+          box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
         }
 
         .time-display .current-time {
@@ -418,190 +323,11 @@ const HomepageWidget = () => {
           100% { opacity: 1; }
         }
 
-        .singer-profile {
-          background: #f8f9fa;
-          border-radius: 12px;
-          padding: 20px;
-          border: 1px solid #e9ecef;
-        }
-
-        .profile-header {
-          display: flex;
-          align-items: flex-start;
-          gap: 20px;
-        }
-
-        .avatar-section {
-          flex-shrink: 0;
-        }
-
-        .singer-avatar {
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
-          object-fit: cover;
-        }
-
-        .avatar-placeholder {
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #667eea, #764ba2);
-          color: white;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 32px;
-          font-weight: bold;
-        }
-
-        .profile-info {
-          flex: 1;
-        }
-
-        .profile-header-info {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          margin-bottom: 8px;
-        }
-
-        .singer-name {
-          font-size: 24px;
-          font-weight: bold;
-          color: #333;
-          margin: 0;
-        }
-
-        .user-role-badge {
-          padding: 4px 12px;
-          border-radius: 12px;
-          color: white;
-          font-size: 12px;
-          font-weight: bold;
-          text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .singer-description {
-          color: #666;
-          margin: 0 0 16px 0;
-          line-height: 1.5;
-        }
-
-        .permissions-info {
-          margin-bottom: 16px;
-        }
-
-        .permissions-info h4 {
-          font-size: 14px;
-          color: #333;
-          margin: 0 0 8px 0;
-        }
-
-        .permission-badges {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
-
-        .permission-badge {
-          padding: 2px 8px;
-          border-radius: 8px;
-          font-size: 11px;
-          font-weight: 500;
-          color: white;
-        }
-
-        .permission-badge.admin {
-          background: linear-gradient(135deg, #e53e3e, #d69e2e);
-        }
-
-        .permission-badge.manager {
-          background: linear-gradient(135deg, #38a169, #3182ce);
-        }
-
-        .permission-badge.user {
-          background: linear-gradient(135deg, #3182ce, #805ad5);
-        }
-
-        .permission-badge.guest {
-          background: #718096;
-        }
-
-        .singer-stats {
-          display: flex;
-          gap: 24px;
-        }
-
-        .stat-item {
-          text-align: center;
-        }
-
-        .stat-number {
-          display: block;
-          font-size: 24px;
-          font-weight: bold;
-          color: #667eea;
-        }
-
-        .stat-label {
-          font-size: 12px;
-          color: #666;
-        }
-
-        .edit-profile-btn {
-          padding: 8px 16px;
-          background: #007bff;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-          font-size: 14px;
-        }
-
-        .profile-edit-form {
-          margin-top: 20px;
-          padding-top: 20px;
-          border-top: 1px solid #e9ecef;
-        }
-
-        .form-row {
-          margin-bottom: 15px;
-        }
-
-        .form-row label {
-          display: block;
-          margin-bottom: 5px;
-          font-weight: bold;
-          color: #333;
-        }
-
-        .form-row input,
-        .form-row textarea {
-          width: 100%;
-          padding: 8px 12px;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          font-size: 14px;
-        }
-
-        .form-actions {
-          display: flex;
-          justify-content: flex-end;
-        }
-
-        .form-actions button {
-          padding: 8px 16px;
-          background: #28a745;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        }
 
         .system-stats h3 {
           margin: 0 0 16px 0;
-          color: #333;
+          color: #ffd700;
+          font-weight: 600;
         }
 
         .stats-grid {
@@ -611,18 +337,34 @@ const HomepageWidget = () => {
         }
 
         .stat-card {
-          background: white;
-          border: 1px solid #e9ecef;
+          background: linear-gradient(135deg, #333333 0%, #404040 100%);
+          border: 1px solid #daa520;
           border-radius: 8px;
           padding: 16px;
           display: flex;
           align-items: center;
           gap: 12px;
-          transition: box-shadow 0.2s ease;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 215, 0, 0.1);
+          position: relative;
         }
 
         .stat-card:hover {
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), 0 0 20px rgba(218, 165, 32, 0.3);
+          transform: translateY(-3px);
+          border-color: #ffd700;
+        }
+
+        .stat-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          border-radius: 7px;
+          background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(218, 165, 32, 0.05));
+          pointer-events: none;
         }
 
         .stat-icon {
@@ -633,131 +375,24 @@ const HomepageWidget = () => {
           align-items: center;
           justify-content: center;
           border-radius: 8px;
-          background: #f8f9fa;
+          background: linear-gradient(135deg, #ffd700, #daa520);
+          color: #000000;
+          box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+          position: relative;
+          z-index: 1;
         }
 
         .stat-content .stat-number {
           font-size: 20px;
           font-weight: bold;
-          color: #333;
+          color: #ffd700;
           margin-bottom: 2px;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .stat-content .stat-label {
           font-size: 12px;
-          color: #666;
-        }
-
-        .featured-players h3,
-        .recent-activities h3 {
-          margin: 0 0 16px 0;
-          color: #333;
-        }
-
-        .players-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-          gap: 12px;
-        }
-
-        .player-card {
-          background: white;
-          border: 1px solid #e9ecef;
-          border-radius: 8px;
-          padding: 12px;
-          text-align: center;
-          transition: transform 0.2s ease;
-        }
-
-        .player-card:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .player-avatar {
-          margin-bottom: 8px;
-        }
-
-        .player-avatar img {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          object-fit: cover;
-        }
-
-        .player-avatar .avatar-placeholder {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #ff9a9e, #fecfef);
-          color: white;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 18px;
-          font-weight: bold;
-          margin: 0 auto;
-        }
-
-        .player-name {
-          font-weight: bold;
-          color: #333;
-          margin-bottom: 2px;
-        }
-
-        .player-id {
-          font-size: 12px;
-          color: #666;
-          margin-bottom: 4px;
-        }
-
-        .song-count {
-          font-size: 11px;
-          background: #e3f2fd;
-          color: #1976d2;
-          padding: 2px 6px;
-          border-radius: 10px;
-        }
-
-        .activities-list {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-
-        .activity-item {
-          display: flex;
-          align-items: center;
-          padding: 12px;
-          background: #f8f9fa;
-          border-radius: 6px;
-          border: 1px solid #e9ecef;
-        }
-
-        .activity-time {
-          font-size: 12px;
-          color: #666;
-          margin-right: 16px;
-          min-width: 60px;
-        }
-
-        .activity-content {
-          flex: 1;
-        }
-
-        .activity-song {
-          font-weight: bold;
-          color: #333;
-          margin-bottom: 2px;
-        }
-
-        .activity-player {
-          font-size: 12px;
-          color: #666;
-        }
-
-        .activity-status {
-          margin-left: 12px;
+          color: #cccccc;
         }
 
         .empty-state {
@@ -765,6 +400,231 @@ const HomepageWidget = () => {
           color: #666;
           padding: 20px;
           font-style: italic;
+        }
+
+        /* 首頁樣式 */
+        .featured-singers-section h3,
+        .upcoming-events-section h3 {
+          margin: 0 0 20px 0;
+          color: #ffd700;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-weight: 600;
+        }
+
+        .singers-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 20px;
+          margin-bottom: 32px;
+        }
+
+        .featured-singer-card {
+          background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
+          border: 1px solid #daa520;
+          border-radius: 16px;
+          padding: 20px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 20px rgba(218, 165, 32, 0.1);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .featured-singer-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 30px rgba(218, 165, 32, 0.3);
+          border-color: #ffd700;
+        }
+
+        .featured-singer-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #ffd700, transparent);
+          opacity: 0.6;
+        }
+
+        .featured-singer-card .singer-avatar {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 12px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .featured-singer-card .avatar-emoji {
+          font-size: 24px;
+        }
+
+        .featured-singer-card .singer-info {
+          text-align: center;
+        }
+
+        .featured-singer-card .singer-name {
+          margin: 0 0 8px 0;
+          color: #ffd700;
+          font-size: 18px;
+          font-weight: 600;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .featured-singer-card .singer-genres {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+          justify-content: center;
+          margin-bottom: 8px;
+        }
+
+        .featured-singer-card .genre-tag {
+          background: linear-gradient(135deg, #daa520, #b8860b);
+          color: #ffffff;
+          padding: 2px 8px;
+          border-radius: 10px;
+          font-size: 11px;
+          font-weight: 500;
+        }
+
+        .featured-singer-card .singer-stats {
+          display: flex;
+          justify-content: center;
+          gap: 12px;
+          margin-bottom: 8px;
+          font-size: 12px;
+          color: #cccccc;
+        }
+
+        .featured-singer-card .rating {
+          color: #ffd700;
+          font-weight: 600;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .featured-singer-card .singer-description {
+          margin: 0;
+          color: #b8b8b8;
+          font-size: 13px;
+          line-height: 1.4;
+        }
+
+        .events-list {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .event-card {
+          background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
+          border: 1px solid #daa520;
+          border-radius: 12px;
+          padding: 20px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.1);
+          display: flex;
+          gap: 16px;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .event-card:hover {
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 30px rgba(218, 165, 32, 0.2);
+          border-color: #ffd700;
+          transform: translateY(-2px);
+        }
+
+        .event-card::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #daa520, transparent);
+          opacity: 0.4;
+        }
+
+        .event-date {
+          background: linear-gradient(135deg, #ffd700, #daa520);
+          color: #000000;
+          padding: 12px;
+          border-radius: 8px;
+          text-align: center;
+          min-width: 60px;
+          flex-shrink: 0;
+          font-weight: 600;
+        }
+
+        .event-date .date {
+          font-size: 20px;
+          font-weight: bold;
+          line-height: 1;
+        }
+
+        .event-date .month {
+          font-size: 12px;
+          opacity: 0.9;
+          margin-top: 2px;
+        }
+
+        .event-info {
+          flex: 1;
+        }
+
+        .event-title {
+          margin: 0 0 8px 0;
+          color: #ffd700;
+          font-size: 18px;
+          font-weight: 600;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .event-meta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          margin-bottom: 8px;
+          font-size: 13px;
+          color: #cccccc;
+        }
+
+        .event-description {
+          margin: 0 0 8px 0;
+          color: #b8b8b8;
+          font-size: 14px;
+          line-height: 1.5;
+        }
+
+        .event-participants {
+          font-size: 12px;
+          color: #daa520;
+          font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+          .singers-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
+          .event-card {
+            flex-direction: column;
+            text-align: center;
+          }
+
+          .event-date {
+            align-self: center;
+          }
+
+          .event-meta {
+            justify-content: center;
+          }
         }
       `}</style>
     </div>

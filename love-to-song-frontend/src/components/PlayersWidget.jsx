@@ -275,6 +275,7 @@ const PlayersWidget = () => {
           height: 100%;
           display: flex;
           flex-direction: column;
+          color: #ffffff;
         }
 
         .widget-header {
@@ -282,20 +283,22 @@ const PlayersWidget = () => {
           justify-content: space-between;
           align-items: center;
           margin-bottom: 20px;
-          border-bottom: 2px solid #f0f0f0;
+          border-bottom: 2px solid #daa520;
           padding-bottom: 10px;
         }
 
         .widget-header h3 {
           margin: 0;
-          color: #333;
+          color: #ffd700;
+          font-weight: 600;
         }
 
         .player-stats {
           display: flex;
           gap: 15px;
           font-size: 14px;
-          color: #666;
+          color: #cccccc;
+          font-weight: 500;
         }
 
         .players-controls {
@@ -312,31 +315,50 @@ const PlayersWidget = () => {
         .search-input {
           width: 100%;
           padding: 8px 12px;
-          border: 1px solid #ddd;
+          border: 1px solid #daa520;
           border-radius: 4px;
           font-size: 14px;
+          background: linear-gradient(135deg, #333333, #404040);
+          color: #ffffff;
+          transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+          outline: none;
+          border-color: #ffd700;
+          box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+          background: linear-gradient(135deg, #404040, #4a4a4a);
+        }
+        
+        .search-input::placeholder {
+          color: #aaaaaa;
         }
 
         .add-button {
           padding: 8px 16px;
-          background: #007bff;
+          background: linear-gradient(135deg, #daa520, #b8860b);
           color: white;
-          border: none;
+          border: 1px solid #daa520;
           border-radius: 4px;
           cursor: pointer;
           white-space: nowrap;
+          transition: all 0.2s ease;
+          font-weight: 600;
         }
 
         .add-button:hover {
-          background: #0056b3;
+          background: linear-gradient(135deg, #b8860b, #9a7209);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(218, 165, 32, 0.3);
         }
 
         .add-player-form {
-          background: #f8f9fa;
+          background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
           padding: 20px;
           border-radius: 8px;
           margin-bottom: 20px;
-          border: 1px solid #e9ecef;
+          border: 1px solid #daa520;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.1);
         }
 
         .form-row {
@@ -348,9 +370,23 @@ const PlayersWidget = () => {
         .form-row input, .form-row select, .form-row textarea {
           flex: 1;
           padding: 8px 12px;
-          border: 1px solid #ddd;
+          border: 1px solid #daa520;
           border-radius: 4px;
           font-size: 14px;
+          background: linear-gradient(135deg, #333333, #404040);
+          color: #ffffff;
+          transition: all 0.2s ease;
+        }
+        
+        .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+          outline: none;
+          border-color: #ffd700;
+          box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+          background: linear-gradient(135deg, #404040, #4a4a4a);
+        }
+        
+        .form-row input::placeholder, .form-row textarea::placeholder {
+          color: #aaaaaa;
         }
 
         .form-actions {
@@ -361,29 +397,36 @@ const PlayersWidget = () => {
 
         .form-actions button {
           padding: 10px 20px;
-          background: #28a745;
+          background: linear-gradient(135deg, #daa520, #b8860b);
           color: white;
-          border: none;
+          border: 1px solid #daa520;
           border-radius: 4px;
           cursor: pointer;
+          transition: all 0.2s ease;
+          font-weight: 600;
         }
 
         .form-actions button:hover {
-          background: #218838;
+          background: linear-gradient(135deg, #b8860b, #9a7209);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(218, 165, 32, 0.3);
         }
 
         .form-actions button:disabled {
-          background: #6c757d;
+          background: linear-gradient(135deg, #666666, #555555);
           cursor: not-allowed;
+          border-color: #666666;
         }
 
         .search-info {
-          background: #e3f2fd;
+          background: linear-gradient(135deg, #404040 0%, #4a4a4a 100%);
           padding: 8px 12px;
           border-radius: 4px;
           margin-bottom: 15px;
           font-size: 14px;
-          color: #1976d2;
+          color: #ffd700;
+          border: 1px solid rgba(218, 165, 32, 0.3);
+          box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.1);
         }
 
         .players-list {
@@ -393,7 +436,7 @@ const PlayersWidget = () => {
 
         .empty-state {
           text-align: center;
-          color: #666;
+          color: #cccccc;
           padding: 40px 0;
           font-style: italic;
         }
@@ -405,15 +448,31 @@ const PlayersWidget = () => {
         }
 
         .player-card {
-          border: 1px solid #e0e0e0;
+          border: 1px solid #daa520;
           border-radius: 8px;
           padding: 15px;
-          background: white;
-          transition: box-shadow 0.2s ease;
+          background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.1);
+          position: relative;
+          overflow: hidden;
         }
 
         .player-card:hover {
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 25px rgba(218, 165, 32, 0.2);
+          border-color: #ffd700;
+          transform: translateY(-2px);
+        }
+        
+        .player-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #daa520, transparent);
+          opacity: 0.5;
         }
 
         .player-header {
@@ -425,8 +484,9 @@ const PlayersWidget = () => {
 
         .player-id {
           font-weight: bold;
-          color: #007bff;
+          color: #ffd700;
           font-size: 16px;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         .player-actions {
@@ -436,47 +496,55 @@ const PlayersWidget = () => {
 
         .song-count-btn {
           padding: 4px 8px;
-          background: #28a745;
+          background: linear-gradient(135deg, #daa520, #b8860b);
           color: white;
-          border: none;
+          border: 1px solid #daa520;
           border-radius: 4px;
           cursor: pointer;
           font-size: 12px;
+          transition: all 0.2s ease;
+          font-weight: 600;
         }
 
         .song-count-btn:hover {
-          background: #218838;
+          background: linear-gradient(135deg, #b8860b, #9a7209);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(218, 165, 32, 0.3);
         }
 
         .delete-btn {
           padding: 4px 8px;
-          background: #dc3545;
+          background: linear-gradient(135deg, #dc3545, #c82333);
           color: white;
-          border: none;
+          border: 1px solid #dc3545;
           border-radius: 4px;
           cursor: pointer;
           font-size: 14px;
           font-weight: bold;
+          transition: all 0.2s ease;
         }
 
         .delete-btn:hover {
-          background: #c82333;
+          background: linear-gradient(135deg, #c82333, #a71e2a);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
         }
 
         .player-name {
           font-weight: bold;
           margin-bottom: 5px;
-          color: #333;
+          color: #ffd700;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         .nickname {
           font-weight: normal;
-          color: #666;
+          color: #cccccc;
         }
 
         .player-details {
           font-size: 14px;
-          color: #666;
+          color: #cccccc;
           margin-bottom: 5px;
         }
 
@@ -486,15 +554,17 @@ const PlayersWidget = () => {
 
         .player-birthday, .player-note {
           font-size: 13px;
-          color: #888;
+          color: #aaaaaa;
           margin-top: 5px;
         }
 
         .player-note {
           font-style: italic;
-          background: #f8f9fa;
+          background: linear-gradient(135deg, #404040 0%, #4a4a4a 100%);
           padding: 5px 8px;
           border-radius: 4px;
+          border: 1px solid rgba(218, 165, 32, 0.3);
+          box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.1);
         }
       `}</style>
     </div>
