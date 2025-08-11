@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>權限系統登入測試</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            animation: gradientShift 10s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+            50% { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 35px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+        
+        .login-header h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .login-header p {
+            opacity: 0.9;
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .login-form {
+            padding: 40px 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            background: white;
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .logout-btn {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3);
+            margin-left: 10px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            z-index: 100 !important;
+            position: relative !important;
+            min-width: 100px;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 101, 101, 0.4);
+        }
+        
+        .logout-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            position: relative;
+            z-index: 50;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .result-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            display: none;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .user-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+            min-height: 120px;
+            position: relative;
+            overflow: visible;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .widgets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .widget {
+            padding: 20px;
+            border: 2px solid;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+        
+        .widget:hover {
+            transform: translateY(-3px);
+        }
+        
+        .widget.visible {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border-color: #22c55e;
+            color: #166534;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.2);
+        }
+        
+        .widget.visible:hover {
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
+        }
+        
+        .widget.hidden {
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            border-color: #ef4444;
+            color: #dc2626;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+            opacity: 0.7;
+        }
+        
+        .widget.hidden:hover {
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+        }
+        
+        .message {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .error-message {
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+        
+        .guest-highlight {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+        
+        .quick-login {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .quick-login h4 {
+            margin-bottom: 15px;
+            color: #374151;
+            font-size: 16px;
+        }
+        
+        .quick-login-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+        }
+        
+        .quick-btn {
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3);
+        }
+        
+        .quick-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+        }
+        
+        .quick-btn.guest { background: linear-gradient(135deg, #71717a 0%, #52525b 100%); }
+        .quick-btn.player { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+        .quick-btn.singer { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .quick-btn.host { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .quick-btn.admin { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .login-form {
+                padding: 30px 20px;
+            }
+            
+            .result-section {
+                padding: 20px;
+            }
+            
+            .user-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                min-height: auto;
+            }
+            
+            .logout-section {
+                align-items: center;
+                width: 100%;
+            }
+            
+            .logout-btn {
+                width: 100%;
+                margin-left: 0;
+            }
+            
+            .widgets {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-card fade-in">
+            <div class="login-header">
+                <h2>🎤 點歌與歌手管理系統</h2>
+                <p>權限系統測試 - 體驗不同角色的功能權限</p>
+            </div>
+            
+            <div class="login-form">
+                <div class="quick-login">
+                    <h4>🚀 一鍵快速登入測試</h4>
+                    <div class="quick-login-buttons">
+                        <button class="quick-btn guest" onclick="quickLogin('guest@test.com')">
+                            👤 訪客<br><small>GUEST</small>
+                        </button>
+                        <button class="quick-btn player" onclick="quickLogin('player@test.com')">
+                            🎮 玩家<br><small>PLAYER</small>
+                        </button>
+                        <button class="quick-btn singer" onclick="quickLogin('singer@test.com')">
+                            🎤 歌手<br><small>SINGER</small>
+                        </button>
+                        <button class="quick-btn host" onclick="quickLogin('host@test.com')">
+                            🎯 主持管理<br><small>HOST_ADMIN</small>
+                        </button>
+                        <button class="quick-btn admin" onclick="quickLogin('super@test.com')">
+                            👑 高層管理員<br><small>SUPER_ADMIN</small>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>🔍 或手動選擇測試角色：</label>
+                    <select id="userSelect">
+                        <option value="">請選擇角色...</option>
+                        <option value="guest@test.com">👤 訪客 (guest@test.com)</option>
+                        <option value="player@test.com">🎮 玩家 (player@test.com)</option>
+                        <option value="singer@test.com">🎤 歌手 (singer@test.com)</option>
+                        <option value="host@test.com">🎯 主持管理 (host@test.com)</option>
+                        <option value="super@test.com">👑 高層管理員 (super@test.com)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>🔐 密碼：</label>
+                    <input type="password" id="password" value="123456" placeholder="預設密碼：123456">
+                </div>
+                
+                <button class="login-btn btn" onclick="simulateLogin()">
+                    🚀 開始測試權限
+                </button>
+                
+                <div id="message"></div>
+                
+                <!-- 當前登入狀態指示 -->
+                <div id="currentStatus" style="
+                    background: linear-gradient(135deg, #f0f8ff 0%, #e8f5e8 100%); 
+                    border: 3px solid #667eea; 
+                    border-radius: 16px; 
+                    padding: 20px; 
+                    margin-top: 25px; 
+                    text-align: center;
+                    display: none;
+                    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+                ">
+                    <div style="font-weight: 700; color: #667eea; margin-bottom: 12px; font-size: 18px;">
+                        🔐 當前登入狀態
+                    </div>
+                    <div id="currentUserName" style="font-size: 18px; color: #2d3748; margin-bottom: 15px; font-weight: 600;"></div>
+                    <button onclick="logout()" style="
+                        background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%); 
+                        color: white; 
+                        border: 2px solid #c53030; 
+                        padding: 12px 24px; 
+                        border-radius: 12px; 
+                        cursor: pointer;
+                        font-size: 16px;
+                        font-weight: 700;
+                        box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4);
+                        transition: all 0.3s ease;
+                        text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+                    " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 30px rgba(229, 62, 62, 0.6)';" onmouseout="this.style.transform=''; this.style.boxShadow='0 6px 20px rgba(229, 62, 62, 0.4)';">
+                        🚪 快速登出
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="result" class="result-section fade-in">
+            <div class="user-header">
+                <div class="user-info" id="userInfo">
+                    <!-- 用戶資訊將在這裡動態生成 -->
+                </div>
+                <div class="logout-section">
+                    <div style="font-size: 12px; color: #718096; margin-bottom: 5px; font-weight: 600;">
+                        ✅ 已登入
+                    </div>
+                    <button class="btn logout-btn" onclick="logout()" style="
+                        border: 2px solid #e53e3e !important;
+                        font-size: 16px !important;
+                        padding: 12px 20px !important;
+                        box-shadow: 0 4px 20px rgba(229, 62, 62, 0.5) !important;
+                        transform: scale(1.05);
+                    ">
+                        🚪 登出
+                    </button>
+                </div>
+            </div>
+            
+            <div class="stats-container" id="statsContainer">
+                <!-- 統計資訊將在這裡動態生成 -->
+            </div>
+            
+            <h3>🎯 功能權限檢查結果</h3>
+            <div id="widgets" class="widgets">
+                <!-- Widget 資訊將在這裡動態生成 -->
+            </div>
+            
+            <div id="guestHighlight">
+                <!-- 訪客特別提示將在這裡動態生成 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 模擬權限系統數據
+        const ROLES_V2 = {
+            SUPER_ADMIN: {
+                name: 'SUPER_ADMIN',
+                displayName: '高層管理員',
+                level: 1,
+                color: '#e53e3e',
+                permissions: ['USER_MANAGEMENT', 'ROLE_MANAGEMENT', 'EVENT_MANAGEMENT', 'SINGER_MANAGEMENT', 'QUEUE_MANAGEMENT', 'WISH_SONG_MANAGEMENT', 'AUDIT_LOGS', 'SYSTEM_STATS', 'DATA_EXPORT']
+            },
+            HOST_ADMIN: {
+                name: 'HOST_ADMIN',
+                displayName: '主持管理',
+                level: 2,
+                color: '#d69e2e',
+                permissions: ['EVENT_MANAGEMENT', 'QUEUE_MANAGEMENT', 'SINGER_ASSIGNMENT', 'REQUEST_CONTROL', 'EVENT_STATS']
+            },
+            SINGER: {
+                name: 'SINGER',
+                displayName: '歌手',
+                level: 3,
+                color: '#38a169',
+                permissions: ['WISH_SONG_RESPONSE', 'SONG_MANAGEMENT', 'MY_REQUESTS', 'MY_PROFILE']
+            },
+            PLAYER: {
+                name: 'PLAYER',
+                displayName: '玩家',
+                level: 4,
+                color: '#3182ce',
+                permissions: ['SONG_REQUEST', 'WISH_SONG_SUBMIT', 'MY_PROFILE', 'VIEW_SINGERS']
+            },
+            GUEST: {
+                name: 'GUEST',
+                displayName: '訪客',
+                level: 5,
+                color: '#718096',
+                permissions: ['VIEW_SINGERS', 'VIEW_SONGS', 'VIEW_HOMEPAGE']
+            }
+        };
+
+        const WIDGET_PERMISSIONS = {
+            'homepage': ['VIEW_HOMEPAGE'],
+            'songRequests': ['SONG_REQUEST', 'QUEUE_MANAGEMENT', 'REQUEST_CONTROL'],
+            'songList': ['SONG_MANAGEMENT', 'VIEW_SONGS'],
+            'singers': ['VIEW_SINGERS'],
+            'players': ['USER_MANAGEMENT', 'SINGER_MANAGEMENT'],
+            'upload': ['USER_MANAGEMENT', 'EVENT_MANAGEMENT'],
+            'stats': ['SYSTEM_STATS', 'EVENT_STATS'],
+            'wishSongs': ['WISH_SONG_SUBMIT', 'WISH_SONG_MANAGEMENT', 'WISH_SONG_RESPONSE'],
+            'events': ['EVENT_MANAGEMENT']
+        };
+
+        const mockUsers = {
+            'super@test.com': { id: 1, email: 'super@test.com', displayName: '高層管理員', roles: ['SUPER_ADMIN'] },
+            'host@test.com': { id: 2, email: 'host@test.com', displayName: '主持管理', roles: ['HOST_ADMIN'] },
+            'singer@test.com': { id: 3, email: 'singer@test.com', displayName: '歌手', roles: ['SINGER'] },
+            'player@test.com': { id: 4, email: 'player@test.com', displayName: '玩家', roles: ['PLAYER'] },
+            'guest@test.com': { id: 5, email: 'guest@test.com', displayName: '訪客', roles: ['GUEST'] }
+        };
+
+        let currentUser = null;
+
+        function quickLogin(email) {
+            document.getElementById('userSelect').value = email;
+            simulateLogin();
+        }
+
+        function simulateLogin() {
+            const email = document.getElementById('userSelect').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            
+            if (!email) {
+                showMessage('請選擇一個角色', 'error');
+                return;
+            }
+            
+            if (password !== '123456') {
+                showMessage('密碼錯誤', 'error');
+                return;
+            }
+
+            const user = mockUsers[email];
+            if (!user) {
+                showMessage('找不到該用戶', 'error');
+                return;
+            }
+
+            currentUser = user;
+            showMessage(`🎉 歡迎 ${user.displayName}！登入成功`, 'success');
+            
+            // 顯示當前登入狀態
+            const currentStatusDiv = document.getElementById('currentStatus');
+            const currentUserNameDiv = document.getElementById('currentUserName');
+            if (currentStatusDiv && currentUserNameDiv) {
+                currentUserNameDiv.textContent = `${user.displayName} (${user.email})`;
+                currentStatusDiv.style.display = 'block';
+            }
+            
+            // 延遲顯示結果，增加動畫效果
+            setTimeout(() => {
+                showUserPermissions(user);
+            }, 500);
+        }
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            const className = type === 'error' ? 'error-message' : 'success-message';
+            const icon = type === 'error' ? '⚠️' : '✅';
+            messageDiv.innerHTML = `<div class="${className} message">${icon} ${text}</div>`;
+        }
+
+        function showUserPermissions(user) {
+            const resultDiv = document.getElementById('result');
+            const userInfoDiv = document.getElementById('userInfo');
+            const widgetsDiv = document.getElementById('widgets');
+            const statsDiv = document.getElementById('statsContainer');
+            const guestDiv = document.getElementById('guestHighlight');
+            
+            const role = ROLES_V2[user.roles[0]];
+            const permissions = role.permissions;
+            
+            // 用戶資訊顯示
+            userInfoDiv.innerHTML = `
+                <div class="user-avatar" style="background: ${role.color};">
+                    ${user.displayName.charAt(0)}
+                </div>
+                <div>
+                    <h3>${user.displayName}</h3>
+                    <div style="color: ${role.color}; font-weight: 600; margin: 5px 0;">
+                        ${role.displayName} (等級 ${role.level})
+                    </div>
+                    <div style="font-size: 14px; color: #6b7280;">
+                        📧 ${user.email}
+                    </div>
+                    <div style="font-size: 12px; color: #9ca3af; margin-top: 8px;">
+                        🔑 權限: ${permissions.length}個 | 📝 ${permissions.join(', ')}
+                    </div>
+                </div>
+            `;
+            
+            // 檢查各個 widget 的可見性
+            const allWidgets = [
+                {id: 'homepage', name: '🏠 首頁展示', permissions: WIDGET_PERMISSIONS.homepage, desc: '系統主頁面'},
+                {id: 'songRequests', name: '🎤 點歌系統', permissions: WIDGET_PERMISSIONS.songRequests, desc: '提交點歌請求'},
+                {id: 'songList', name: '🎵 會的歌', permissions: WIDGET_PERMISSIONS.songList, desc: '瀏覽歌曲清單'},
+                {id: 'singers', name: '🎭 歌手資訊', permissions: WIDGET_PERMISSIONS.singers, desc: '查看歌手檔案'},
+                {id: 'players', name: '👥 用戶管理', permissions: WIDGET_PERMISSIONS.players, desc: '管理用戶帳號'},
+                {id: 'upload', name: '📁 檔案管理', permissions: WIDGET_PERMISSIONS.upload, desc: '上傳與批量導入'},
+                {id: 'stats', name: '📊 統計資訊', permissions: WIDGET_PERMISSIONS.stats, desc: '系統數據分析'},
+                {id: 'wishSongs', name: '⭐ 願望歌', permissions: WIDGET_PERMISSIONS.wishSongs, desc: '願望歌曲系統'},
+                {id: 'events', name: '🎪 活動管理', permissions: WIDGET_PERMISSIONS.events, desc: '創建與管理活動'}
+            ];
+            
+            let widgetHtml = '';
+            let visibleCount = 0;
+            let hiddenCount = 0;
+            
+            allWidgets.forEach(widget => {
+                const hasPermission = widget.permissions.some(perm => permissions.includes(perm));
+                if (hasPermission) visibleCount++;
+                else hiddenCount++;
+                
+                widgetHtml += `
+                    <div class="widget ${hasPermission ? 'visible' : 'hidden'}">
+                        <div style="font-size: 18px; margin-bottom: 8px;">${widget.name}</div>
+                        <div style="font-size: 12px; opacity: 0.8; margin-bottom: 10px;">${widget.desc}</div>
+                        <div style="font-weight: bold;">
+                            ${hasPermission ? '✅ 可以使用' : '❌ 權限不足'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            widgetsDiv.innerHTML = widgetHtml;
+            
+            // 統計資訊
+            statsDiv.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${visibleCount}</div>
+                    <div class="stat-label">可用功能</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${hiddenCount}</div>
+                    <div class="stat-label">受限功能</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${permissions.length}</div>
+                    <div class="stat-label">擁有權限</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${role.level}</div>
+                    <div class="stat-label">權限等級</div>
+                </div>
+            `;
+            
+            // 訪客特別提示
+            if (user.roles[0] === 'GUEST') {
+                guestDiv.innerHTML = `
+                    <div class="guest-highlight">
+                        <h4>🎯 訪客權限驗證結果</h4>
+                        <div style="margin: 15px 0;">
+                            <strong>預期功能：</strong>只能看到「歌手資訊、首頁、會的歌」<br>
+                            <strong>實際結果：</strong>可見 ${visibleCount} 個功能組件
+                        </div>
+                        <div style="font-size: 18px; font-weight: bold; color: ${visibleCount === 3 ? '#059669' : '#dc2626'};">
+                            ${visibleCount === 3 ? '✅ 測試通過！權限控制正確' : '❌ 測試失敗！權限設置有問題'}
+                        </div>
+                        ${visibleCount === 3 ? 
+                            '<div style="margin-top: 10px; font-size: 14px; color: #059669;">訪客用戶確實只能看到被允許的功能，其他功能已被正確隱藏。</div>' : 
+                            '<div style="margin-top: 10px; font-size: 14px; color: #dc2626;">權限系統需要調整，訪客看到了過多功能。</div>'
+                        }
+                    </div>
+                `;
+            } else {
+                guestDiv.innerHTML = '';
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function logout() {
+            currentUser = null;
+            const resultDiv = document.getElementById('result');
+            const messageDiv = document.getElementById('message');
+            const currentStatusDiv = document.getElementById('currentStatus');
+            
+            resultDiv.style.display = 'none';
+            if (currentStatusDiv) {
+                currentStatusDiv.style.display = 'none';
+            }
+            messageDiv.innerHTML = '<div class="success-message message">👋 已安全登出，感謝使用！</div>';
+            
+            // 重置表單
+            document.getElementById('userSelect').value = '';
+            document.getElementById('password').value = '123456';
+            
+            // 滾動到頂部
+            document.body.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

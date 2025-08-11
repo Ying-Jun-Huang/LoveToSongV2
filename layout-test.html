@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人化布局記憶功能測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .result {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .error {
+            background: #ffe8e8;
+            color: #c53030;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        .stats {
+            background: #e6ffe6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎛️ 個人化布局記憶功能測試</h1>
+        
+        <div class="test-section">
+            <h3>📊 當前布局統計</h3>
+            <div id="statsResult" class="result">載入中...</div>
+            <button onclick="updateStats()">更新統計</button>
+        </div>
+
+        <div class="test-section">
+            <h3>💾 測試保存布局</h3>
+            <p>模擬保存不同用戶的布局設定</p>
+            <button onclick="testSaveLayout('super')">保存高層管理員布局</button>
+            <button onclick="testSaveLayout('host')">保存主持管理布局</button>
+            <button onclick="testSaveLayout('guest')">保存訪客布局</button>
+            <div id="saveResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📋 測試讀取布局</h3>
+            <p>模擬不同用戶登入讀取個人布局</p>
+            <button onclick="testLoadLayout('1')">加載用戶 1</button>
+            <button onclick="testLoadLayout('2')">加載用戶 2</button>
+            <button onclick="testLoadLayout('0')">加載訪客</button>
+            <div id="loadResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔄 測試重置功能</h3>
+            <button onclick="testResetLayout()">重置當前用戶布局</button>
+            <div id="resetResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📤 匯出/匯入布局</h3>
+            <button onclick="exportLayouts()">匯出所有布局</button>
+            <button onclick="clearAllLayouts()">清空所有布局</button>
+            <button onclick="importTestLayouts()">匯入測試布局</button>
+            <div id="exportResult" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        // 模擬 layoutService 的功能
+        const LAYOUT_STORAGE_KEY = 'user_layouts';
+
+        function mockGetLayoutStats() {
+            const allLayouts = JSON.parse(localStorage.getItem(LAYOUT_STORAGE_KEY) || '{}');
+            const currentUserId = localStorage.getItem('mockUserId') || 'guest';
+            
+            return {
+                totalUsers: Object.keys(allLayouts).length,
+                currentUser: currentUserId,
+                hasLayout: !!allLayouts[currentUserId]
+            };
+        }
+
+        function mockSaveLayout(userId, layoutData) {
+            const allLayouts = JSON.parse(localStorage.getItem(LAYOUT_STORAGE_KEY) || '{}');
+            allLayouts[userId] = {
+                layout: layoutData.layout,
+                components: layoutData.components,
+                userId: userId,
+                lastModified: Date.now()
+            };
+            localStorage.setItem(LAYOUT_STORAGE_KEY, JSON.stringify(allLayouts));
+            return true;
+        }
+
+        function mockGetLayout(userId) {
+            const allLayouts = JSON.parse(localStorage.getItem(LAYOUT_STORAGE_KEY) || '{}');
+            return allLayouts[userId] || null;
+        }
+
+        function mockResetLayout(userId) {
+            const allLayouts = JSON.parse(localStorage.getItem(LAYOUT_STORAGE_KEY) || '{}');
+            if (allLayouts[userId]) {
+                delete allLayouts[userId];
+                localStorage.setItem(LAYOUT_STORAGE_KEY, JSON.stringify(allLayouts));
+                return true;
+            }
+            return false;
+        }
+
+        function updateStats() {
+            const stats = mockGetLayoutStats();
+            const result = `📊 布局統計信息:
+總用戶數: ${stats.totalUsers}
+當前用戶: ${stats.currentUser}
+當前用戶是否有保存布局: ${stats.hasLayout ? '是 🔖' : '否 📝'}
+
+📁 詳細存儲信息:
+${JSON.stringify(JSON.parse(localStorage.getItem(LAYOUT_STORAGE_KEY) || '{}'), null, 2)}`;
+            
+            document.getElementById('statsResult').textContent = result;
+        }
+
+        function testSaveLayout(role) {
+            const userId = role === 'super' ? '1' : role === 'host' ? '2' : '0';
+            
+            // 模擬布局數據
+            const mockLayout = [
+                { i: 'homepage', x: 0, y: 0, w: 6, h: 4 },
+                { i: 'songList', x: 6, y: 0, w: 6, h: 4 },
+                role === 'super' && { i: 'stats', x: 0, y: 4, w: 12, h: 6 }
+            ].filter(Boolean);
+
+            const mockComponents = mockLayout.map(item => ({
+                i: item.i,
+                type: item.i,
+                props: {}
+            }));
+
+            const success = mockSaveLayout(userId, {
+                layout: mockLayout,
+                components: mockComponents
+            });
+
+            const result = success 
+                ? `✅ 成功保存 ${role} 用戶 (ID: ${userId}) 的布局\n組件數量: ${mockLayout.length}`
+                : `❌ 保存失敗`;
+
+            document.getElementById('saveResult').textContent = result;
+            updateStats();
+        }
+
+        function testLoadLayout(userId) {
+            // 設置當前用戶
+            localStorage.setItem('mockUserId', userId);
+            
+            const layout = mockGetLayout(userId);
+            const result = layout 
+                ? `✅ 成功加載用戶 ${userId} 的布局
+最後修改時間: ${new Date(layout.lastModified).toLocaleString()}
+組件數量: ${layout.layout.length}
+布局詳情: ${JSON.stringify(layout.layout, null, 2)}`
+                : `📝 用戶 ${userId} 沒有保存的布局，將使用默認布局`;
+
+            document.getElementById('loadResult').textContent = result;
+            updateStats();
+        }
+
+        function testResetLayout() {
+            const currentUserId = localStorage.getItem('mockUserId') || 'guest';
+            const success = mockResetLayout(currentUserId);
+            
+            const result = success 
+                ? `🔄 成功重置用戶 ${currentUserId} 的布局`
+                : `ℹ️ 用戶 ${currentUserId} 沒有保存的布局需要重置`;
+
+            document.getElementById('resetResult').textContent = result;
+            updateStats();
+        }
+
+        function exportLayouts() {
+            const allLayouts = JSON.parse(localStorage.getItem(LAYOUT_STORAGE_KEY) || '{}');
+            const result = `📤 匯出所有用戶布局:
+${JSON.stringify(allLayouts, null, 2)}`;
+            
+            document.getElementById('exportResult').textContent = result;
+        }
+
+        function clearAllLayouts() {
+            localStorage.removeItem(LAYOUT_STORAGE_KEY);
+            document.getElementById('exportResult').textContent = '🗑️ 已清空所有用戶布局';
+            updateStats();
+        }
+
+        function importTestLayouts() {
+            const testLayouts = {
+                '1': {
+                    layout: [
+                        { i: 'homepage', x: 0, y: 0, w: 4, h: 4 },
+                        { i: 'stats', x: 4, y: 0, w: 8, h: 4 },
+                        { i: 'users', x: 0, y: 4, w: 12, h: 6 }
+                    ],
+                    userId: '1',
+                    lastModified: Date.now() - 3600000
+                },
+                '2': {
+                    layout: [
+                        { i: 'homepage', x: 0, y: 0, w: 6, h: 4 },
+                        { i: 'events', x: 6, y: 0, w: 6, h: 4 }
+                    ],
+                    userId: '2',
+                    lastModified: Date.now() - 1800000
+                }
+            };
+            
+            localStorage.setItem(LAYOUT_STORAGE_KEY, JSON.stringify(testLayouts));
+            document.getElementById('exportResult').textContent = '📥 已匯入測試布局數據';
+            updateStats();
+        }
+
+        // 初始化
+        updateStats();
+    </script>
+</body>
+</html>

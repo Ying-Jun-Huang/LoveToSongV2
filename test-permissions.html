@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>權限系統測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .role-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .role-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .role-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .widgets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .widget {
+            padding: 15px;
+            border: 2px solid;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .widget.visible {
+            background: #e6ffe6;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+        
+        .widget.hidden {
+            background: #ffe6e6;
+            border-color: #f44336;
+            color: #c62828;
+        }
+        
+        .permissions {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎤 點歌與歌手管理系統 - 權限測試</h1>
+        <p>以下展示不同角色用戶登入後可看到的功能組件</p>
+    </div>
+
+    <!-- GUEST 角色 -->
+    <div class="role-section">
+        <div class="role-header">
+            <div class="role-avatar" style="background: #718096;">G</div>
+            <div>
+                <h2>訪客 (GUEST)</h2>
+                <div class="permissions">權限: VIEW_SINGERS, VIEW_SONGS, VIEW_HOMEPAGE</div>
+            </div>
+        </div>
+        <p><strong>⭐ 重點測試：</strong>只能看到「歌手資訊、首頁、會的歌」</p>
+        <div class="widgets">
+            <div class="widget visible">🏠 首頁展示 ✅</div>
+            <div class="widget visible">🎵 會的歌 ✅</div>
+            <div class="widget visible">🎤 歌手資訊 ✅</div>
+            <div class="widget hidden">🎤 點歌系統 ❌</div>
+            <div class="widget hidden">👥 用戶管理 ❌</div>
+            <div class="widget hidden">📁 檔案管理 ❌</div>
+            <div class="widget hidden">📊 統計資訊 ❌</div>
+            <div class="widget hidden">⭐ 願望歌 ❌</div>
+            <div class="widget hidden">🎪 活動管理 ❌</div>
+        </div>
+    </div>
+
+    <!-- PLAYER 角色 -->
+    <div class="role-section">
+        <div class="role-header">
+            <div class="role-avatar" style="background: #3182ce;">P</div>
+            <div>
+                <h2>玩家 (PLAYER)</h2>
+                <div class="permissions">權限: SONG_REQUEST, WISH_SONG_SUBMIT, MY_PROFILE, VIEW_SINGERS</div>
+            </div>
+        </div>
+        <div class="widgets">
+            <div class="widget visible">🏠 首頁展示 ✅</div>
+            <div class="widget visible">🎤 點歌系統 ✅</div>
+            <div class="widget visible">🎵 會的歌 ✅</div>
+            <div class="widget visible">🎤 歌手資訊 ✅</div>
+            <div class="widget visible">⭐ 願望歌 ✅</div>
+            <div class="widget hidden">👥 用戶管理 ❌</div>
+            <div class="widget hidden">📁 檔案管理 ❌</div>
+            <div class="widget hidden">📊 統計資訊 ❌</div>
+            <div class="widget hidden">🎪 活動管理 ❌</div>
+        </div>
+    </div>
+
+    <!-- SINGER 角色 -->
+    <div class="role-section">
+        <div class="role-header">
+            <div class="role-avatar" style="background: #38a169;">S</div>
+            <div>
+                <h2>歌手 (SINGER)</h2>
+                <div class="permissions">權限: WISH_SONG_RESPONSE, SONG_MANAGEMENT, MY_REQUESTS, MY_PROFILE</div>
+            </div>
+        </div>
+        <div class="widgets">
+            <div class="widget visible">🏠 首頁展示 ✅</div>
+            <div class="widget visible">🎵 會的歌 ✅</div>
+            <div class="widget visible">🎤 歌手資訊 ✅</div>
+            <div class="widget visible">⭐ 願望歌 ✅</div>
+            <div class="widget hidden">🎤 點歌系統 ❌</div>
+            <div class="widget hidden">👥 用戶管理 ❌</div>
+            <div class="widget hidden">📁 檔案管理 ❌</div>
+            <div class="widget hidden">📊 統計資訊 ❌</div>
+            <div class="widget hidden">🎪 活動管理 ❌</div>
+        </div>
+    </div>
+
+    <!-- HOST_ADMIN 角色 -->
+    <div class="role-section">
+        <div class="role-header">
+            <div class="role-avatar" style="background: #d69e2e;">H</div>
+            <div>
+                <h2>主持管理 (HOST_ADMIN)</h2>
+                <div class="permissions">權限: EVENT_MANAGEMENT, QUEUE_MANAGEMENT, SINGER_ASSIGNMENT, REQUEST_CONTROL, EVENT_STATS</div>
+            </div>
+        </div>
+        <div class="widgets">
+            <div class="widget visible">🏠 首頁展示 ✅</div>
+            <div class="widget visible">🎤 點歌系統 ✅</div>
+            <div class="widget visible">🎤 歌手資訊 ✅</div>
+            <div class="widget visible">👥 用戶管理 ✅</div>
+            <div class="widget visible">📁 檔案管理 ✅</div>
+            <div class="widget visible">📊 統計資訊 ✅</div>
+            <div class="widget visible">🎪 活動管理 ✅</div>
+            <div class="widget hidden">🎵 會的歌 ❌</div>
+            <div class="widget hidden">⭐ 願望歌 ❌</div>
+        </div>
+    </div>
+
+    <!-- SUPER_ADMIN 角色 -->
+    <div class="role-section">
+        <div class="role-header">
+            <div class="role-avatar" style="background: #e53e3e;">A</div>
+            <div>
+                <h2>高層管理員 (SUPER_ADMIN)</h2>
+                <div class="permissions">權限: 所有功能權限</div>
+            </div>
+        </div>
+        <div class="widgets">
+            <div class="widget visible">🏠 首頁展示 ✅</div>
+            <div class="widget visible">🎤 點歌系統 ✅</div>
+            <div class="widget visible">🎵 會的歌 ✅</div>
+            <div class="widget visible">🎤 歌手資訊 ✅</div>
+            <div class="widget visible">👥 用戶管理 ✅</div>
+            <div class="widget visible">📁 檔案管理 ✅</div>
+            <div class="widget visible">📊 統計資訊 ✅</div>
+            <div class="widget visible">⭐ 願望歌 ✅</div>
+            <div class="widget visible">🎪 活動管理 ✅</div>
+        </div>
+    </div>
+
+    <div class="header" style="margin-top: 30px;">
+        <h3>🧪 實際測試步驟</h3>
+        <p>前端 React 應用正在運行，請嘗試訪問以下地址：</p>
+        <div style="margin: 15px 0;">
+            <strong>主要地址：</strong> <code>http://localhost:3000</code><br>
+            <strong>網絡地址：</strong> <code>http://172.29.133.116:3000</code>
+        </div>
+        <p>測試帳號（密碼都是 123456）：</p>
+        <ul style="text-align: left; display: inline-block;">
+            <li><code>guest@test.com</code> - 訪客權限</li>
+            <li><code>player@test.com</code> - 玩家權限</li>
+            <li><code>singer@test.com</code> - 歌手權限</li>
+            <li><code>host@test.com</code> - 主持管理權限</li>
+            <li><code>super@test.com</code> - 高層管理員權限</li>
+        </ul>
+    </div>
+</body>
+</html>
