@@ -5,15 +5,26 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// 添加全局錯誤捕獲
+window.addEventListener('error', (e) => {
+  console.error('[GLOBAL ERROR]', e.error, e.filename, e.lineno);
+});
+
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('[UNHANDLED PROMISE REJECTION]', e.reason);
+});
+
+// 調試用：顯示當前的認證狀態
+console.log('[DEBUG] Current token:', localStorage.getItem('token'));
+console.log('[DEBUG] Current userInfo:', localStorage.getItem('userInfo'));
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

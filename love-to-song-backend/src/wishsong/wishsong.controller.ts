@@ -139,14 +139,21 @@ export class WishSongController {
     return await this.wishSongService.deleteWishSong(req.user.authContext, id);
   }
 
-  // 獲取願望歌統計
-  @Get('stats/:singerId?')
+  // 獲取所有願望歌統計
+  @Get('stats')
+  @RequirePermission(ENTITIES.ANALYTICS, ACTIONS.VIEW)
+  async getAllWishSongStats(@Request() req) {
+    return await this.wishSongService.getWishSongStats(req.user.authContext);
+  }
+
+  // 獲取特定歌手的願望歌統計
+  @Get('stats/:singerId')
   @RequirePermission(ENTITIES.ANALYTICS, ACTIONS.VIEW)
   async getWishSongStats(
     @Request() req,
-    @Param('singerId') singerId?: string
+    @Param('singerId') singerId: string
   ) {
-    const targetSingerId = singerId ? parseInt(singerId) : undefined;
+    const targetSingerId = parseInt(singerId);
     return await this.wishSongService.getWishSongStats(req.user.authContext, targetSingerId);
   }
 

@@ -65,7 +65,8 @@ export const ACTIONS = {
   APPROVE: 'approve',
   REORDER: 'reorder',
   EXPORT: 'export',
-  PROXY: 'proxy'
+  PROXY: 'proxy',
+  BROADCAST: 'broadcast'
 } as const;
 
 // ABAC 條件類型
@@ -114,6 +115,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     
     // 點歌管理
     { entity: ENTITIES.REQUEST, action: ACTIONS.VIEW },
+    { entity: ENTITIES.REQUEST, action: ACTIONS.CREATE },
     { entity: ENTITIES.REQUEST, action: ACTIONS.ASSIGN },
     { entity: ENTITIES.REQUEST, action: ACTIONS.REORDER },
     { entity: ENTITIES.REQUEST, action: ACTIONS.UPDATE },

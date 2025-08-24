@@ -88,7 +88,7 @@ const PermissionManagement = () => {
   const handlePermissionToggle = async (permission, granted, reason = '') => {
     try {
       // 模擬權限調整 API 調用
-      console.log(`${granted ? '授予' : '撤銷'} 權限: ${permission}, 原因: ${reason}`);
+      // 權限調整
       
       // 重新載入用戶權限
       if (selectedUser) {
@@ -338,7 +338,7 @@ const PermissionManagement = () => {
           font-size: 18px;
         }
 
-        .user-info {
+        .user-item .user-info {
           flex: 1;
         }
 

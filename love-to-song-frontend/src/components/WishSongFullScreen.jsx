@@ -142,7 +142,7 @@ const WishSongFullScreen = () => {
       description: wishForm.description
     };
 
-    console.log('願望歌提交:', newWish);
+    // 願望歌提交
     
     // 重置表單
     setWishForm({

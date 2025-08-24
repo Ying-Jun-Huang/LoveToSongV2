@@ -7,39 +7,44 @@ async function createAdminUsers() {
   try {
     const users = [
       {
-        email: 'superadmin@demo.com',
-        username: 'superadmin',
+        email: 'super@test.com',
+        username: 'super',
         password: '123456',
         role: 'SUPER_ADMIN',
-        description: '系統最高管理員'
+        description: '系統最高管理員',
+        displayName: '高層管理員'
       },
       {
-        email: 'admin@demo.com',
-        username: 'admin',
+        email: 'host@test.com',
+        username: 'host',
         password: '123456',
-        role: 'ADMIN',
-        description: '中間管理員'
+        role: 'HOST_ADMIN',
+        description: '主持管理',
+        displayName: '主持管理'
       },
       {
-        email: 'manager@demo.com',
-        username: 'manager',
+        email: 'singer@test.com',
+        username: 'singer',
         password: '123456',
-        role: 'MANAGER',
-        description: '基層管理員'
+        role: 'SINGER',
+        description: '歌手',
+        displayName: '歌手'
       },
       {
-        email: 'user@demo.com',
-        username: 'user',
+        email: 'player@test.com',
+        username: 'player',
         password: '123456',
-        role: 'USER',
-        description: '一般用戶'
+        role: 'PLAYER',
+        description: '玩家',
+        displayName: '玩家'
       },
       {
-        email: 'guest@demo.com',
+        email: 'guest@test.com',
         username: 'guest',
         password: '123456',
         role: 'GUEST',
-        description: '訪客用戶'
+        description: '訪客用戶',
+        displayName: '訪客'
       }
     ];
 
@@ -50,10 +55,8 @@ async function createAdminUsers() {
         const user = await prisma.user.create({
           data: {
             email: userData.email,
-            username: userData.username,
             password: hashedPassword,
-            role: userData.role,
-            description: userData.description,
+            displayName: userData.displayName,
           },
         });
 

@@ -133,13 +133,19 @@ export class QueueController {
     return await this.queueService.cancelRequest(req.user.authContext, id, body?.reason);
   }
 
-  // 獲取用戶的點歌歷史
-  @Get('history/:userId?')
+  // 獲取當前用戶的點歌歷史
+  @Get('history')
+  async getCurrentUserRequestHistory(@Request() req) {
+    return await this.queueService.getUserRequestHistory(req.user.authContext);
+  }
+
+  // 獲取指定用戶的點歌歷史
+  @Get('history/:userId')
   async getUserRequestHistory(
     @Request() req,
-    @Param('userId') userId?: string
+    @Param('userId') userId: string
   ) {
-    const targetUserId = userId ? parseInt(userId) : undefined;
+    const targetUserId = parseInt(userId);
     return await this.queueService.getUserRequestHistory(req.user.authContext, targetUserId);
   }
 

@@ -1,10 +1,10 @@
 const { PrismaClient } = require('@prisma/client');
 
+const prisma = new PrismaClient();
+
 async function checkUsers() {
-  const prisma = new PrismaClient();
-  
   try {
-    console.log('🔍 檢查資料庫中的用戶...');
+    console.log('=== 檢查用戶數據 ===');
     
     const users = await prisma.user.findMany({
       include: {
@@ -15,26 +15,33 @@ async function checkUsers() {
         }
       }
     });
+
+    console.log('找到', users.length, '個用戶:');
     
-    if (users.length === 0) {
-      console.log('❌ 資料庫中沒有用戶資料！');
-      console.log('請執行: npx tsx src/database/seed.ts');
-    } else {
-      console.log(`✅ 找到 ${users.length} 個用戶:`);
-      users.forEach(user => {
-        const roles = user.userRoles.map(ur => ur.role.name).join(', ');
-        console.log(`  📧 ${user.email} (${user.displayName}) - 角色: ${roles}`);
-      });
-      
-      // 測試密碼驗證
-      const bcrypt = require('bcryptjs');
-      const testUser = users[0];
-      const isValid = await bcrypt.compare('123456', testUser.password);
-      console.log(`\n🔐 密碼 '123456' 對 ${testUser.email} 驗證結果: ${isValid ? '✅ 正確' : '❌ 錯誤'}`);
-    }
-    
+    users.forEach(user => {
+      console.log('\n用戶 ID:', user.id);
+      console.log('Email:', user.email);
+      console.log('Display Name:', user.displayName);
+      console.log('密碼哈希:', user.password ? '已設定' : '未設定');
+      console.log('角色:');
+      if (user.userRoles && user.userRoles.length > 0) {
+        user.userRoles.forEach(userRole => {
+          console.log('  -', userRole.role.name);
+        });
+      } else {
+        console.log('  - 無角色');
+      }
+    });
+
+    console.log('\n=== 檢查角色數據 ===');
+    const roles = await prisma.role.findMany();
+    console.log('找到', roles.length, '個角色:');
+    roles.forEach(role => {
+      console.log('  -', role.name + ':', role.description);
+    });
+
   } catch (error) {
-    console.error('❌ 檢查用戶時發生錯誤:', error);
+    console.error('檢查用戶時發生錯誤:', error);
   } finally {
     await prisma.$disconnect();
   }

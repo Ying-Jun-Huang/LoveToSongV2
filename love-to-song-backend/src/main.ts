@@ -12,7 +12,11 @@ async function bootstrap() {
   });
 
   // Enable global validation
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: false,
+  }));
 
   const port = process.env.PORT || 3001;
   await app.listen(port);

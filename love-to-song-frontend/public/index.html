@@ -16,5 +16,20 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    
+    <!-- Service Worker Registration - Unregister existing SW -->
+    <script>
+      // 清理已註冊的 Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.getRegistrations().then((registrations) => {
+            registrations.forEach((registration) => {
+              console.log('Unregistering Service Worker:', registration.scope);
+              registration.unregister();
+            });
+          });
+        });
+      }
+    </script>
   </body>
 </html>

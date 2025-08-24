@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuthV2';
 const TabNavigation = ({ activeTab, onTabChange, tabs = [] }) => {
   const { hasAnyPermission } = useAuth();
 
-  // 過濾用戶可以看到的分頁
+  // 過濾用戶可以看到的分頁 - 清理版本，移除所有調試日誌
   const visibleTabs = tabs.filter(tab => {
     if (!tab.permissions || tab.permissions.length === 0) {
       return true; // 沒有權限要求的分頁，所有人都能看到
@@ -18,7 +18,7 @@ const TabNavigation = ({ activeTab, onTabChange, tabs = [] }) => {
         {visibleTabs.map(tab => (
           <button
             key={tab.id}
-            className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+            className="tab-button"
             onClick={() => onTabChange(tab.id)}
             disabled={tab.disabled}
           >
@@ -71,13 +71,6 @@ const TabNavigation = ({ activeTab, onTabChange, tabs = [] }) => {
           box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
         }
 
-        .tab-button.active {
-          background: linear-gradient(135deg, #ffd700 0%, #daa520 100%);
-          color: #000000;
-          font-weight: 600;
-          border-color: #ffd700;
-          box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
-        }
 
         .tab-button:disabled {
           opacity: 0.5;
@@ -105,10 +98,6 @@ const TabNavigation = ({ activeTab, onTabChange, tabs = [] }) => {
           text-align: center;
         }
 
-        .tab-button.active .tab-badge {
-          background: #000000;
-          color: #ffd700;
-        }
 
         @media (max-width: 768px) {
           .tab-navigation {

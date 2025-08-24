@@ -11,12 +11,12 @@ import {
   BadRequestException,
   NotFoundException,
   ParseIntPipe,
+  Request,
 } from '@nestjs/common';
 import { SongRequestsService, CreateSongRequestDto, UpdateSongRequestDto } from './song-requests.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('song-requests')
-@UseGuards(JwtAuthGuard)
 export class SongRequestsController {
   constructor(private readonly songRequestsService: SongRequestsService) {}
 
@@ -67,6 +67,69 @@ export class SongRequestsController {
       parseInt(limit, 10),
       parseInt(days, 10)
     );
+  }
+
+  // 獲取我的點歌狀態摘要
+  @Get('my-status')
+  @UseGuards(JwtAuthGuard)
+  async getMyRequestStatus(@Request() req) {
+    try {
+      return await this.songRequestsService.getMyRequestStatus(req.user.userId);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  // 獲取我的點歌統計分析
+  @Get('my-analytics')
+  @UseGuards(JwtAuthGuard)
+  async getMyAnalytics(
+    @Request() req,
+    @Query('days') days?: string
+  ) {
+    try {
+      const daysNum = days ? parseInt(days, 10) : 30;
+      return await this.songRequestsService.getMyAnalytics(
+        req.user.userId,
+        daysNum
+      );
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  // 獲取我的點歌歷史（增強版）
+  @Get('my-history')
+  @UseGuards(JwtAuthGuard)
+  async getMyHistory(
+    @Request() req,
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '20',
+    @Query('status') status?: string
+  ) {
+    return this.songRequestsService.getMyHistory(
+      req.user.userId,
+      parseInt(page, 10),
+      parseInt(limit, 10),
+      status
+    );
+  }
+
+  // 簡單測試端點
+  @Get('test-simple')
+  testSimple() {
+    return { message: 'Simple test works' };
+  }
+
+
+  // 測試用戶對象
+  @Get('debug-user')
+  @UseGuards(JwtAuthGuard)
+  debugUser(@Request() req) {
+    return {
+      user: req.user,
+      userKeys: Object.keys(req.user || {}),
+    };
   }
 
   // 根據 ID 獲取單個點歌請求
@@ -136,7 +199,7 @@ export class SongRequestsController {
       throw new BadRequestException('IDs array is required');
     }
 
-    if (!['PENDING', 'COMPLETED', 'CANCELLED'].includes(body.status)) {
+    if (!['QUEUED', 'ASSIGNED', 'ACCEPTED', 'DECLINED', 'PERFORMING', 'COMPLETED', 'CANCELLED'].includes(body.status)) {
       throw new BadRequestException('Invalid status');
     }
 
@@ -199,6 +262,7 @@ export class SongRequestsController {
       parseInt(limit, 10)
     );
   }
+
 
   // 清空已完成的請求（清理功能）
   @Delete('completed/clear')

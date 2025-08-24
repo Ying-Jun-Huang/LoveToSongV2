@@ -64,10 +64,10 @@ export class PlayersController {
   @Roles(Role.MANAGER, Role.ADMIN, Role.SUPER_ADMIN)
   @Post()
   async create(@Body() createPlayerDto: CreatePlayerDto) {
-    // 檢查 playerId 是否已存在
-    const existingPlayer = await this.playersService.findByPlayerId(createPlayerDto.playerId);
+    // 檢查名稱是否已存在
+    const existingPlayer = await this.playersService.findByName(createPlayerDto.name);
     if (existingPlayer) {
-      throw new BadRequestException('Player ID already exists');
+      throw new BadRequestException('Player name already exists');
     }
     
     return this.playersService.create(createPlayerDto);
@@ -96,13 +96,13 @@ export class PlayersController {
     }
   }
 
-  // 更新玩家點歌次數
-  @Post(':id/increment-song-count')
-  async incrementSongCount(@Param('id', ParseIntPipe) id: number) {
-    try {
-      return await this.playersService.updateSongCount(id, 1);
-    } catch (error) {
-      throw new BadRequestException('Failed to update song count');
+  // 獲取點歌統計 (暫時移除點歌次數更新功能)
+  @Get(':id/requests')
+  async getPlayerRequests(@Param('id', ParseIntPipe) id: number) {
+    const player = await this.playersService.findOne(id);
+    if (!player) {
+      throw new BadRequestException('Player not found');
     }
+    return (player as any).requests || [];
   }
 }

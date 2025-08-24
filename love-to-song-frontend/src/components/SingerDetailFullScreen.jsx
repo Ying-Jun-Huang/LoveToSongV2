@@ -52,11 +52,7 @@ const SingerDetailFullScreen = ({ singer, onBack }) => {
     };
 
     // 這裡應該發送API請求
-    console.log('點歌請求:', {
-      singer: singer.name,
-      song: song.title,
-      requester: user.displayName
-    });
+    // 處理點歌請求
 
     // 更新歌曲的點歌次數
     const songIndex = singerDetail.songs.findIndex(s => s.id === song.id);
@@ -121,7 +117,7 @@ const SingerDetailFullScreen = ({ singer, onBack }) => {
           {sections.map(section => (
             <button
               key={section.id}
-              className={`tab-button ${activeSection === section.id ? 'active' : ''}`}
+              className="tab-button"
               onClick={() => setActiveSection(section.id)}
             >
               <span className="tab-icon">{section.icon}</span>
@@ -377,10 +373,6 @@ const SingerDetailFullScreen = ({ singer, onBack }) => {
           transition: all 0.2s ease;
         }
 
-        .tab-button.active {
-          color: #667eea;
-          border-bottom-color: #667eea;
-        }
 
         .tab-button:hover {
           color: #667eea;

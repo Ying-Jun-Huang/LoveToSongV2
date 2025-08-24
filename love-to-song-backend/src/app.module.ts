@@ -11,13 +11,15 @@ import { LayoutModule } from './layout/layout.module';
 import { PlayersModule } from './players/players.module';
 import { UploadModule } from './upload/upload.module';
 import { SongRequestsModule } from './song-requests/song-requests.module';
+import { SingersModule } from './singers/singers.module';
 // New v2 modules
 import { EventsModule } from './events/events.module';
 import { QueueModule } from './queue/queue.module';
 import { WishSongModule } from './wishsong/wishsong.module';
-import { AuditModule } from './audit/audit.module';
+// import { AuditModule } from './audit/audit.module';
 import { NotificationModule } from './notifications/notification.module';
 import { ReportModule } from './reports/report.module';
+import { WebSocketModule } from './websocket/websocket.module';
 
 @Module({
   imports: [
@@ -36,13 +38,15 @@ import { ReportModule } from './reports/report.module';
     PlayersModule,
     UploadModule,
     SongRequestsModule,
+    SingersModule,
     // New v2 modules
     EventsModule,
     QueueModule,
     WishSongModule,
-    AuditModule,
+    // AuditModule,
     NotificationModule,
     ReportModule,
+    WebSocketModule,
   ],
   controllers: [AppController],
   providers: [AppService],

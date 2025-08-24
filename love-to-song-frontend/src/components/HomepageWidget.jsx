@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const HomepageWidget = () => {
+  const navigate = useNavigate();
   const [featuredSingers, setFeaturedSingers] = useState([]);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [systemStats, setSystemStats] = useState({
@@ -20,12 +22,12 @@ const HomepageWidget = () => {
       setCurrentTime(new Date());
     }, 1000);
 
-    // 每30秒更新數據
+    // 每60秒更新數據 (降低頻率以減少網絡活動)
     const dataInterval = setInterval(() => {
       fetchFeaturedSingers();
       fetchUpcomingEvents();
       fetchSystemStats();
-    }, 30000);
+    }, 60000);
 
     return () => {
       clearInterval(timeInterval);
@@ -166,6 +168,12 @@ const HomepageWidget = () => {
     return '晚安';
   };
 
+  // 處理歌手卡片點擊
+  const handleSingerClick = (singer) => {
+    // 跳轉到歌手歌單頁面，傳遞歌手ID和名稱
+    navigate(`/singer-songs?id=${singer.id}&name=${encodeURIComponent(singer.name)}`);
+  };
+
   return (
     <div className="homepage-widget">
       {/* 頂部時間和問候 */}
@@ -187,7 +195,12 @@ const HomepageWidget = () => {
         <h3>🌟 推薦歌手</h3>
         <div className="singers-grid">
           {featuredSingers.map(singer => (
-            <div key={singer.id} className="featured-singer-card">
+            <div 
+              key={singer.id} 
+              className="featured-singer-card clickable"
+              onClick={() => handleSingerClick(singer)}
+              title={`查看 ${singer.name} 的歌單`}
+            >
               <div className="singer-avatar" style={{ backgroundColor: singer.color }}>
                 <span className="avatar-emoji">{singer.avatar}</span>
               </div>
@@ -203,6 +216,7 @@ const HomepageWidget = () => {
                   <span className="songs-count">{singer.songsCount} 首歌</span>
                 </div>
                 <p className="singer-description">{singer.description}</p>
+                <div className="click-hint">點擊查看歌單 →</div>
               </div>
             </div>
           ))}
@@ -426,15 +440,28 @@ const HomepageWidget = () => {
           border-radius: 16px;
           padding: 20px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 20px rgba(218, 165, 32, 0.1);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          transition: all 0.3s ease;
           position: relative;
           overflow: hidden;
+        }
+
+        .featured-singer-card.clickable {
+          cursor: pointer;
         }
 
         .featured-singer-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 30px rgba(218, 165, 32, 0.3);
           border-color: #ffd700;
+        }
+
+        .featured-singer-card.clickable:hover .click-hint {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        .featured-singer-card.clickable:active {
+          transform: translateY(-2px) scale(0.98);
         }
 
         .featured-singer-card::before {
@@ -508,10 +535,22 @@ const HomepageWidget = () => {
         }
 
         .featured-singer-card .singer-description {
-          margin: 0;
+          margin: 0 0 8px 0;
           color: #b8b8b8;
           font-size: 13px;
           line-height: 1.4;
+        }
+
+        .click-hint {
+          margin-top: 8px;
+          color: #ffd700;
+          font-size: 12px;
+          font-weight: 600;
+          opacity: 0;
+          transform: translateX(-10px);
+          transition: all 0.3s ease;
+          text-align: center;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         .events-list {

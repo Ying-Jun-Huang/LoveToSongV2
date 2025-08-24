@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuthV2';
-import TabNavigation from '../components/TabNavigation';
+import TabNavigation from '../components/TabNavigationStatic';
 import TabContainer from '../components/TabContainer';
 import PermissionManagementFullScreen from '../components/PermissionManagementFullScreen';
 import SingerListFullScreen from '../components/SingerListFullScreen';
@@ -8,6 +8,13 @@ import SingerDetailFullScreen from '../components/SingerDetailFullScreen';
 import SongRequestFullScreen from '../components/SongRequestFullScreen';
 import WishSongFullScreen from '../components/WishSongFullScreen';
 import PlayerSongRequestsFullScreen from '../components/PlayerSongRequestsFullScreen';
+import EventManagementFullScreen from '../components/EventManagementFullScreen';
+import NotificationButton from '../components/NotificationButton';
+import RealtimeAnimations from '../components/RealtimeAnimations';
+import FloatingNotifications from '../components/FloatingNotifications';
+import AudioNotificationSettings from '../components/AudioNotificationSettings';
+import ReportSystemFullScreen from '../components/ReportSystemFullScreen';
+import SystemSettingsFullScreen from '../components/SystemSettingsFullScreen';
 
 // 組件導入
 import HomepageWidget from '../components/HomepageWidget';
@@ -17,14 +24,43 @@ import PlayersWidget from '../components/PlayersWidget';
 import UploadWidget from '../components/UploadWidget';
 import SongRequestWidget from '../components/SongRequestWidget';
 import PermissionManagement from '../components/PermissionManagement';
+import AuthDebugger from '../components/AuthDebugger';
+import ErrorBoundary from '../components/ErrorBoundary';
+import MyRequestDashboard from '../components/MyRequestDashboard';
+import SystemNotifications from '../components/SystemNotifications';
+import SongRequestForm from '../components/SongRequestForm';
 
 
 const DashboardLayoutV2 = () => {
-  const { canViewWidget, user, getPrimaryRole, logout, loading } = useAuth();
-
+  // 清理版本 - 移除所有調試日誌 2024-08-12
+  const { canViewWidget, user, getPrimaryRole, logout, loading, isAuthenticated, permissions } = useAuth();
 
   const [activeTab, setActiveTab] = useState('homepage');
-  const [selectedSinger, setSelectedSinger] = useState(null);
+  const [showAudioSettings, setShowAudioSettings] = useState(false);
+
+  // 暫時移除所有 useEffect 以防止重新渲染循環
+  // React.useEffect(() => {
+  //   // 在需要時可以添加相關的處理邏輯  
+  // }, [user, isAuthenticated, loading, permissions]);
+
+  // 暫時完全禁用全局錯誤處理器以避免刷新循環
+  // React.useEffect(() => {
+  //   const handleError = (event) => {
+  //     console.error('Global error caught:', event.error);
+  //   };
+  //   
+  //   const handleUnhandledRejection = (event) => {
+  //     console.error('Unhandled promise rejection:', event.reason);
+  //   };
+
+  //   window.addEventListener('error', handleError);
+  //   window.addEventListener('unhandledrejection', handleUnhandledRejection);
+
+  //   return () => {
+  //     window.removeEventListener('error', handleError);
+  //     window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+  //   };
+  // }, []);
 
   // 定義分頁配置 - 基於原有widget功能
   const tabs = [
@@ -75,7 +111,14 @@ const DashboardLayoutV2 = () => {
       label: '我的點歌',
       icon: '🎶',
       permissions: ['SONG_REQUEST'],
-      description: '查看我的點歌記錄和狀態'
+      description: '個人點歌歷史與統計分析'
+    },
+    {
+      id: 'requestSong',
+      label: '點歌',
+      icon: '🎤',
+      permissions: ['SONG_REQUEST'],
+      description: '點歌功能 - 選擇歌手和歌曲'
     },
     {
       id: 'wishSongs',
@@ -92,6 +135,20 @@ const DashboardLayoutV2 = () => {
       description: '活動創建與管理'
     },
     {
+      id: 'reports',
+      label: '報告中心',
+      icon: '📊',
+      permissions: ['SYSTEM_STATS', 'EVENT_STATS', 'DATA_EXPORT'],
+      description: '數據分析與報表生成'
+    },
+    {
+      id: 'settings',
+      label: '系統設定',
+      icon: '⚙️',
+      permissions: ['SYSTEM_SETTINGS', 'SECURITY_SETTINGS'],
+      description: '系統配置和管理設定'
+    },
+    {
       id: 'permissions',
       label: '權限管理',
       icon: '🔑',
@@ -102,16 +159,20 @@ const DashboardLayoutV2 = () => {
 
 
   // 渲染分頁內容
+  // 權限管理分頁渲染函數
+  const renderPermissionsTab = () => (
+    <div className="fullscreen-tab-content">
+      <div className="tab-content-header">
+        <h2>🔑 權限管理</h2>
+        <p>用戶權限個人化管理</p>
+      </div>
+      <div className="tab-widget-content">
+        <PermissionManagement />
+      </div>
+    </div>
+  );
+
   const renderTabContent = () => {
-    // 如果有選擇的歌手，顯示歌手詳細頁面
-    if (selectedSinger && activeTab === 'singerList') {
-      return (
-        <SingerDetailFullScreen 
-          singer={selectedSinger} 
-          onBack={() => setSelectedSinger(null)} 
-        />
-      );
-    }
 
     switch (activeTab) {
       case 'homepage':
@@ -119,7 +180,17 @@ const DashboardLayoutV2 = () => {
       case 'songList':
         return renderSongListTab();
       case 'singerList':
-        return <SingerListFullScreen onSelectSinger={setSelectedSinger} />;
+        return (
+          <div className="fullscreen-tab-content">
+            <div className="tab-content-header">
+              <h2>👥 歌手列表</h2>
+              <p>瀏覽所有歌手，點擊查看詳細歌單</p>
+            </div>
+            <div className="tab-widget-content">
+              <SingerListFullScreen />
+            </div>
+          </div>
+        );
       case 'players':
         return renderPlayersTab();
       case 'upload':
@@ -127,13 +198,46 @@ const DashboardLayoutV2 = () => {
       case 'stats':
         return renderStatsTab();
       case 'playerRequests':
-        return <PlayerSongRequestsFullScreen />;
+        return (
+          <div className="fullscreen-tab-content">
+            <div className="tab-content-header">
+              <h2>🎶 我的點歌管理</h2>
+              <p>查看個人點歌歷史、狀態追蹤和統計分析</p>
+            </div>
+            <div className="tab-widget-content">
+              <MyRequestDashboard />
+            </div>
+          </div>
+        );
+      case 'requestSong':
+        return (
+          <div className="fullscreen-tab-content">
+            <div className="tab-content-header">
+              <h2>🎤 點歌</h2>
+              <p>選擇歌手和歌曲進行點歌</p>
+            </div>
+            <div className="tab-widget-content">
+              <div className="p-4">
+                <SongRequestForm 
+                  onRequestSuccess={() => {
+                    // 點歌成功後可以切換到我的點歌頁面
+                    setActiveTab('playerRequests');
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        );
       case 'wishSongs':
         return <WishSongFullScreen />;
       case 'events':
-        return renderEventsTab();
+        return <EventManagementFullScreen />;
+      case 'reports':
+        return <ReportSystemFullScreen />;
+      case 'settings':
+        return <SystemSettingsFullScreen />;
       case 'permissions':
-        return <PermissionManagementFullScreen />;
+        return renderPermissionsTab();
       default:
         return renderHomepageTab();
     }
@@ -202,7 +306,6 @@ const DashboardLayoutV2 = () => {
     </div>
   );
 
-
   const renderEventsTab = () => (
     <div className="fullscreen-tab-content">
       <div className="tab-content-header">
@@ -268,6 +371,14 @@ const DashboardLayoutV2 = () => {
                 {userRole.displayName}
               </span>
             </div>
+            <NotificationButton className="notification-button" />
+            <button 
+              className="audio-settings-button"
+              onClick={() => setShowAudioSettings(true)}
+              title="音效設置"
+            >
+              🔊
+            </button>
             {user.roles.includes('GUEST') ? (
               <a href="/login" className="login-button">
                 🔐 登入
@@ -284,17 +395,22 @@ const DashboardLayoutV2 = () => {
           activeTab={activeTab}
           onTabChange={(newTab) => {
             setActiveTab(newTab);
-            // 切換分頁時重置歌手選擇
-            if (newTab !== 'singerList') {
-              setSelectedSinger(null);
-            }
           }}
           tabs={tabs}
         />
         
-        <TabContainer activeTab={activeTab}>
-          {renderTabContent()}
-        </TabContainer>
+        <ErrorBoundary>
+          <TabContainer activeTab={activeTab}>
+            {renderTabContent()}
+          </TabContainer>
+        </ErrorBoundary>
+        
+        <RealtimeAnimations />
+        <FloatingNotifications />
+        <AudioNotificationSettings 
+          isOpen={showAudioSettings}
+          onClose={() => setShowAudioSettings(false)}
+        />
         
         <style jsx="true">{`
           .dashboard-layout-container {
@@ -305,24 +421,56 @@ const DashboardLayoutV2 = () => {
             flex-direction: column;
           }
 
-          .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
-            border: 1px solid #ffd700;
-            flex-shrink: 0;
+          .dashboard-layout-container .dashboard-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            margin-bottom: 20px !important;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%) !important;
+            padding: 24px 32px !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3) !important;
+            border: 1px solid #ffd700 !important;
+            flex-shrink: 0 !important;
+            min-height: 88px !important;
+            height: 88px !important;
+            box-sizing: border-box !important;
           }
 
-          .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+          body .dashboard-layout-container .dashboard-header .user-info {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0 !important;
+            flex: 1 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            justify-content: flex-start !important;
+            align-content: normal !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            min-height: 40px !important;
+            height: auto !important;
+            box-sizing: border-box !important;
+            column-gap: 0 !important;
+            row-gap: 0 !important;
           }
+
+          body .dashboard-layout-container .dashboard-header .user-info > * {
+            margin: 0 !important;
+            flex-shrink: 0 !important;
+            flex-grow: 0 !important;
+            flex-basis: auto !important;
+          }
+
+          body .dashboard-layout-container .dashboard-header .user-info > *:not(:last-child) {
+            margin-right: 12px !important;
+          }
+
+          body .dashboard-layout-container .dashboard-header .realtime-status,
+          body .dashboard-layout-container .dashboard-header .notification-button {
+            padding: 0 !important;
+          }
+
 
           .user-avatar {
             width: 40px;
@@ -338,17 +486,42 @@ const DashboardLayoutV2 = () => {
             border: 2px solid #ffd700;
           }
 
-          .user-details h3 {
-            margin: 0;
-            font-size: 16px;
-            color: #ffd700;
-            font-weight: 600;
+          .dashboard-layout-container .dashboard-header .user-details {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            min-height: 40px !important;
+            height: 40px !important;
+            overflow: hidden !important;
+            width: 120px !important;
+            min-width: 120px !important;
+            max-width: 120px !important;
+            flex-shrink: 0 !important;
+            flex-grow: 0 !important;
           }
 
-          .user-role {
-            font-size: 12px;
-            font-weight: 500;
-            color: #d4af37;
+          .dashboard-layout-container .dashboard-header .user-details h3 {
+            margin: 0 !important;
+            font-size: 16px !important;
+            color: #ffd700 !important;
+            font-weight: 600 !important;
+            line-height: 20px !important;
+            height: 20px !important;
+            overflow: hidden !important;
+            white-space: nowrap !important;
+            text-overflow: ellipsis !important;
+          }
+
+          .dashboard-layout-container .dashboard-header .user-role {
+            font-size: 12px !important;
+            font-weight: 500 !important;
+            color: #d4af37 !important;
+            line-height: 16px !important;
+            height: 16px !important;
+            overflow: hidden !important;
+            white-space: nowrap !important;
+            text-overflow: ellipsis !important;
+            margin: 0 !important;
           }
 
           .logout-button {
@@ -393,6 +566,29 @@ const DashboardLayoutV2 = () => {
             background: linear-gradient(135deg, #daa520 0%, #b8860b 100%);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5);
+          }
+
+          .audio-settings-button {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            height: 40px;
+          }
+
+          .audio-settings-button:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
           }
 
           .no-widgets {
@@ -490,7 +686,7 @@ const DashboardLayoutV2 = () => {
               gap: 15px;
             }
 
-            .user-info {
+            .dashboard-header .user-info {
               width: 100%;
               justify-content: space-between;
             }
@@ -571,4 +767,15 @@ const EventsWidget = () => (
   </div>
 );
 
-export default DashboardLayoutV2;
+// 現在讓我找到主返回語句並添加系統通知
+const DashboardLayoutV2WithNotifications = () => {
+  const dashboard = DashboardLayoutV2();
+  return (
+    <>
+      {dashboard}
+      <SystemNotifications />
+    </>
+  );
+};
+
+export default DashboardLayoutV2WithNotifications;

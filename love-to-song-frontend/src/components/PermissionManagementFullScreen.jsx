@@ -170,6 +170,15 @@ const PermissionManagementFullScreen = () => {
       </div>
 
       <style jsx="true">{`
+        /* 強制重置 dashboard-header 的樣式，防止被權限管理頁面影響 */
+        :global(.dashboard-layout-container .dashboard-header .user-info) {
+          gap: 12px !important;
+          justify-content: flex-start !important;
+          align-items: center !important;
+          display: flex !important;
+          flex-direction: row !important;
+        }
+        
         .permission-management-fullscreen {
           height: 100%;
           display: flex;
@@ -301,7 +310,7 @@ const PermissionManagementFullScreen = () => {
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
-        .user-info {
+        .user-card .user-info {
           flex: 1;
         }
 

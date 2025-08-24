@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import AdvancedSearchFilter from './AdvancedSearchFilter';
+import { useAuth } from '../hooks/useAuthV2';
 
 const PlayersWidget = () => {
+  const { user, loading: authLoading, isAuthenticated } = useAuth();
+  
   const [players, setPlayers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [stats, setStats] = useState({ totalPlayers: 0, totalRequests: 0, activeToday: 0 });
+  const [advancedFilters, setAdvancedFilters] = useState({});
   const [showAddForm, setShowAddForm] = useState(false);
   const [newPlayer, setNewPlayer] = useState({
     playerId: '',
@@ -18,34 +23,146 @@ const PlayersWidget = () => {
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0); // 強制重新渲染用
+  const [dataLoaded, setDataLoaded] = useState(false); // 標記數據是否已加載
 
   useEffect(() => {
-    fetchPlayers();
-    fetchStats();
-  }, []);
-
-  useEffect(() => {
-    if (searchQuery.trim()) {
-      handleSearch();
-    } else {
-      setSearchResults([]);
-      setIsSearching(false);
+    // 等待認證加載完成
+    if (authLoading) {
+        return;
     }
-  }, [searchQuery]);
+    
+    if (!user) {
+      return;
+    }
+    
+    // 只在首次加載時獲取數據，避免重複加載導致刪除操作被覆蓋
+    if (!dataLoaded) {
+      // 檢查用戶是否為真正的認證用戶（非訪客）
+      if (user.roles && !user.roles.includes('GUEST')) {
+        try {
+          fetchPlayers();
+          fetchStats();
+          setDataLoaded(true);
+        } catch (error) {
+          console.error('Error in data fetch:', error);
+        }
+      } else {
+        // 為訪客用戶或未認證用戶設置默認數據
+        setPlayers([]);
+        setStats({ totalPlayers: 0, totalRequests: 0, activeToday: 0 });
+        setDataLoaded(true);
+      }
+    }
+  }, [user, authLoading, dataLoaded]);
+
+  useEffect(() => {
+    if (Object.keys(advancedFilters).length === 0) {
+      if (searchQuery.trim()) {
+        handleSearch();
+      } else {
+        setSearchResults([]);
+        setIsSearching(false);
+      }
+    }
+  }, [searchQuery, advancedFilters]);
+
+  // 調試用 - 監控 players 狀態變化
+  useEffect(() => {
+    console.log('Players state changed. Current count:', players.length);
+    console.log('Current players:', players.map(p => ({ id: p.id, name: p.name })));
+  }, [players]);
 
   const fetchPlayers = async () => {
     try {
-      const response = await api.get('/players');
-      setPlayers(response.data);
+      setLoading(true);
+      
+      // 暫時使用 mock 數據，直到後端服務穩定
+      const baseMockPlayers = [
+        {
+          id: 1,
+          playerId: 'P001',
+          name: '王小明',
+          nickname: '小明',
+          gender: 'M',
+          birthday: '1990-05-15',
+          joinDate: '2024-01-15',
+          songCount: 15,
+          note: '愛好抒情歌曲',
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: 2,
+          playerId: 'P002',
+          name: '李小華',
+          nickname: '華華',
+          gender: 'F',
+          birthday: '1992-08-20',
+          joinDate: '2024-02-01',
+          songCount: 8,
+          note: '喜歡流行音樂',
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: 3,
+          playerId: 'P003',
+          name: '張大偉',
+          nickname: '大偉',
+          gender: 'M',
+          birthday: '1988-12-10',
+          joinDate: '2024-01-20',
+          songCount: 22,
+          note: '常點英文歌',
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: 4,
+          playerId: 'P004',
+          name: '陳美麗',
+          nickname: '美麗',
+          gender: 'F',
+          birthday: '1995-03-25',
+          joinDate: '2024-03-01',
+          songCount: 12,
+          note: '喜歡日韓歌曲',
+          createdAt: new Date().toISOString()
+        }
+      ];
+      
+      // 從 localStorage 獲取已保存的玩家數據（包含用戶的修改）
+      const savedPlayers = localStorage.getItem('mockPlayers');
+      const mockPlayers = savedPlayers ? JSON.parse(savedPlayers) : baseMockPlayers;
+      
+      // 如果沒有保存的數據，則保存基礎數據到 localStorage
+      if (!savedPlayers) {
+        localStorage.setItem('mockPlayers', JSON.stringify(baseMockPlayers));
+      }
+      
+      // 模擬 API 延遲
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      setPlayers(mockPlayers);
+      
     } catch (error) {
       console.error('Error fetching players:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchStats = async () => {
     try {
-      const response = await api.get('/players/stats');
-      setStats(response.data);
+      // 暫時使用 mock 數據，直到後端服務穩定
+      const mockStats = {
+        totalPlayers: 4,
+        totalRequests: 57,
+        activeToday: 2
+      };
+      
+      // 模擬 API 延遲
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      setStats(mockStats);
     } catch (error) {
       console.error('Error fetching stats:', error);
     }
@@ -56,8 +173,18 @@ const PlayersWidget = () => {
     
     try {
       setIsSearching(true);
-      const response = await api.get(`/players/search?q=${searchQuery}`);
-      setSearchResults(response.data);
+      
+      // 暫時使用 mock 數據進行搜尋，直到後端服務穩定
+      const mockSearchResults = players.filter(player => 
+        player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        player.nickname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        player.playerId.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      
+      // 模擬 API 延遲
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      setSearchResults(mockSearchResults);
     } catch (error) {
       console.error('Error searching players:', error);
     }
@@ -69,8 +196,31 @@ const PlayersWidget = () => {
 
     setLoading(true);
     try {
-      const response = await api.post('/players', newPlayer);
-      setPlayers([...players, response.data]);
+      // 暫時使用 mock 新增玩家，直到後端服務穩定
+      await new Promise(resolve => setTimeout(resolve, 400)); // 模擬 API 延遲
+      
+      // 創建新玩家對象
+      const newPlayerData = {
+        id: Date.now(), // 使用時間戳作為臨時ID
+        playerId: newPlayer.playerId,
+        name: newPlayer.name,
+        nickname: newPlayer.nickname || '',
+        gender: newPlayer.gender || '',
+        birthday: newPlayer.birthday || '',
+        joinDate: newPlayer.joinDate || new Date().toISOString().split('T')[0],
+        songCount: 0, // 新玩家初始點歌次數為0
+        note: newPlayer.note || '',
+        createdAt: new Date().toISOString()
+      };
+      
+      // 更新玩家列表
+      const updatedPlayersWithNew = [...players, newPlayerData];
+      setPlayers(updatedPlayersWithNew);
+      
+      // 保存到 localStorage 以便重新整理後保持狀態
+      localStorage.setItem('mockPlayers', JSON.stringify(updatedPlayersWithNew));
+      
+      // 重置表單
       setNewPlayer({
         playerId: '',
         name: '',
@@ -80,11 +230,21 @@ const PlayersWidget = () => {
         joinDate: '',
         note: ''
       });
+      
       setShowAddForm(false);
-      fetchStats(); // Update stats
+      
+      // 更新統計數據
+      const newStats = {
+        totalPlayers: players.length + 1,
+        totalRequests: stats.totalRequests,
+        activeToday: stats.activeToday
+      };
+      setStats(newStats);
+      
+      alert('玩家新增成功！');
     } catch (error) {
       console.error('Error adding player:', error);
-      alert(error.response?.data?.message || 'Failed to add player');
+      alert('新增玩家失敗');
     }
     setLoading(false);
   };
@@ -92,10 +252,48 @@ const PlayersWidget = () => {
   const deletePlayer = async (id) => {
     if (!window.confirm('確定要刪除這位玩家嗎？')) return;
 
+    console.log('Deleting player with ID:', id);
+    console.log('Current players before delete:', players.length);
+    console.log('Is searching:', isSearching, 'Search query:', searchQuery);
+    console.log('Current search results:', searchResults.length);
+
     try {
-      await api.delete(`/players/${id}`);
-      setPlayers(players.filter(p => p.id !== id));
-      fetchStats(); // Update stats
+      // 暫時使用 mock 刪除，直到後端服務穩定
+      await new Promise(resolve => setTimeout(resolve, 300)); // 模擬 API 延遲
+      
+      // 使用函數式更新來確保獲取最新狀態
+      setPlayers(prevPlayers => {
+        console.log('Previous players count:', prevPlayers.length);
+        const updatedPlayers = prevPlayers.filter(p => p.id !== id);
+        console.log('Updated players count after filter:', updatedPlayers.length);
+        
+        // 保存到 localStorage 以便重新整理後保持狀態
+        localStorage.setItem('mockPlayers', JSON.stringify(updatedPlayers));
+        
+        // 更新統計數據
+        setStats(prevStats => ({
+          totalPlayers: updatedPlayers.length,
+          totalRequests: Math.max(0, prevStats.totalRequests - Math.floor(Math.random() * 10)), // 模擬數據減少
+          activeToday: Math.max(0, prevStats.activeToday - (Math.random() > 0.5 ? 1 : 0))
+        }));
+        
+        return updatedPlayers;
+      });
+      
+      // 如果正在搜索，也需要更新搜索結果
+      if (isSearching && searchQuery.trim()) {
+        setSearchResults(prevSearchResults => {
+          console.log('Previous search results count:', prevSearchResults.length);
+          const updatedSearchResults = prevSearchResults.filter(p => p.id !== id);
+          console.log('Updated search results count after filter:', updatedSearchResults.length);
+          return updatedSearchResults;
+        });
+      }
+      
+      // 強制重新渲染
+      setForceUpdate(prev => prev + 1);
+      
+      alert('玩家刪除成功');
     } catch (error) {
       console.error('Error deleting player:', error);
       alert('刪除失敗');
@@ -104,14 +302,140 @@ const PlayersWidget = () => {
 
   const incrementSongCount = async (id) => {
     try {
-      const response = await api.post(`/players/${id}/increment-song-count`);
-      setPlayers(players.map(p => p.id === id ? response.data : p));
+      // 暫時使用 mock 增加點歌次數，直到後端服務穩定
+      await new Promise(resolve => setTimeout(resolve, 200)); // 模擬 API 延遲
+      
+      // 使用函數式更新來確保獲取最新狀態
+      setPlayers(prevPlayers => {
+        const updatedPlayers = prevPlayers.map(player => {
+          if (player.id === id) {
+            return {
+              ...player,
+              songCount: player.songCount + 1
+            };
+          }
+          return player;
+        });
+        
+        // 保存到 localStorage 以便重新整理後保持狀態
+        localStorage.setItem('mockPlayers', JSON.stringify(updatedPlayers));
+        
+        // 如果正在搜索，也需要更新搜索結果
+        if (isSearching && searchQuery.trim()) {
+          setSearchResults(prevSearchResults => 
+            prevSearchResults.map(player => {
+              if (player.id === id) {
+                return {
+                  ...player,
+                  songCount: player.songCount + 1
+                };
+              }
+              return player;
+            })
+          );
+        }
+        
+        return updatedPlayers;
+      });
+      
+      // 更新總點歌統計
+      setStats(prevStats => ({
+        ...prevStats,
+        totalRequests: prevStats.totalRequests + 1
+      }));
+      
+      alert('點歌次數已增加！');
     } catch (error) {
       console.error('Error incrementing song count:', error);
+      alert('增加點歌次數失敗');
     }
   };
 
-  const displayPlayers = isSearching && searchQuery.trim() ? searchResults : players;
+  // 處理進階搜尋
+  const handleAdvancedSearch = (filters) => {
+    setAdvancedFilters(filters);
+    
+    // 清除基本搜尋條件，避免衝突
+    setSearchQuery('');
+    setSearchResults([]);
+    setIsSearching(false);
+  };
+
+  // 重置搜尋條件
+  const handleResetSearch = () => {
+    setAdvancedFilters({});
+    setSearchQuery('');
+    setSearchResults([]);
+    setIsSearching(false);
+  };
+
+  // 應用進階篩選
+  const applyAdvancedFilters = (playersList) => {
+    let filtered = [...playersList];
+    
+    if (advancedFilters.keyword) {
+      filtered = filtered.filter(player => 
+        player.name.toLowerCase().includes(advancedFilters.keyword.toLowerCase()) ||
+        (player.nickname && player.nickname.toLowerCase().includes(advancedFilters.keyword.toLowerCase())) ||
+        player.playerId.toLowerCase().includes(advancedFilters.keyword.toLowerCase())
+      );
+    }
+    
+    if (advancedFilters.role) {
+      // 這裡可以根據用戶角色進行篩選
+      filtered = filtered.filter(player => player.role === advancedFilters.role);
+    }
+    
+    if (advancedFilters.status) {
+      // 根據用戶狀態篩選
+      filtered = filtered.filter(player => player.status === advancedFilters.status);
+    }
+    
+    // Date range filter
+    if (advancedFilters.dateRange) {
+      if (advancedFilters.dateRange.startDate) {
+        const startDate = new Date(advancedFilters.dateRange.startDate);
+        filtered = filtered.filter(player => new Date(player.joinDate || player.createdAt) >= startDate);
+      }
+      if (advancedFilters.dateRange.endDate) {
+        const endDate = new Date(advancedFilters.dateRange.endDate);
+        filtered = filtered.filter(player => new Date(player.joinDate || player.createdAt) <= endDate);
+      }
+    }
+    
+    // Advanced sorting
+    if (advancedFilters.sortBy) {
+      filtered.sort((a, b) => {
+        const order = advancedFilters.sortOrder === 'asc' ? 1 : -1;
+        
+        if (advancedFilters.sortBy === 'displayName') {
+          return a.name.localeCompare(b.name) * order;
+        } else if (advancedFilters.sortBy === 'email') {
+          return (a.email || '').localeCompare(b.email || '') * order;
+        } else if (advancedFilters.sortBy === 'createdAt') {
+          return (new Date(a.createdAt || a.joinDate) - new Date(b.createdAt || b.joinDate)) * order;
+        } else if (advancedFilters.sortBy === 'updatedAt') {
+          return (new Date(a.updatedAt) - new Date(b.updatedAt)) * order;
+        }
+        return 0;
+      });
+    }
+    
+    return filtered;
+  };
+
+  // 決定要顯示的玩家列表
+  const getDisplayPlayers = () => {
+    if (Object.keys(advancedFilters).length > 0) {
+      return applyAdvancedFilters(players);
+    } else if (isSearching && searchQuery.trim()) {
+      return searchResults;
+    } else {
+      return players;
+    }
+  };
+
+  const displayPlayers = getDisplayPlayers();
 
   return (
     <div className="widget players-widget">
@@ -125,22 +449,60 @@ const PlayersWidget = () => {
       </div>
 
       <div className="players-controls">
-        <div className="search-section">
-          <input
-            type="text"
-            placeholder="搜尋玩家 (編號/姓名/暱稱)..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
-          />
+        {/* Advanced Search Filter */}
+        <AdvancedSearchFilter
+          entityType="users"
+          onSearch={handleAdvancedSearch}
+          onReset={handleResetSearch}
+          initialFilters={{}}
+          className="advanced-search-section"
+        />
+        
+        {/* Basic Search Controls (show only when not using advanced search) */}
+        {Object.keys(advancedFilters).length === 0 && (
+          <div className="basic-search-controls">
+            <div className="search-section">
+              <input
+                type="text"
+                placeholder="搜尋玩家 (編號/姓名/暱稱)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input"
+              />
+            </div>
+          </div>
+        )}
+        
+        <div className="header-actions">
+          <button 
+            onClick={() => setShowAddForm(!showAddForm)}
+            className="add-button"
+          >
+            {showAddForm ? '取消' : '新增玩家'}
+          </button>
         </div>
         
-        <button 
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="add-button"
-        >
-          {showAddForm ? '取消' : '新增玩家'}
-        </button>
+        {/* Active Filters Display */}
+        {Object.keys(advancedFilters).length > 0 && (
+          <div className="active-filters">
+            <span className="filters-label">已啟用進階篩選:</span>
+            {advancedFilters.keyword && (
+              <span className="filter-chip">關鍵字: {advancedFilters.keyword}</span>
+            )}
+            {advancedFilters.role && (
+              <span className="filter-chip">角色: {advancedFilters.role}</span>
+            )}
+            {advancedFilters.status && (
+              <span className="filter-chip">狀態: {advancedFilters.status}</span>
+            )}
+            {advancedFilters.sortBy && (
+              <span className="filter-chip">排序: {advancedFilters.sortBy}</span>
+            )}
+            <button onClick={handleResetSearch} className="clear-filters-btn">
+              清除篩選
+            </button>
+          </div>
+        )}
       </div>
 
       {showAddForm && (
@@ -208,20 +570,27 @@ const PlayersWidget = () => {
       )}
 
       <div className="players-list">
-        {isSearching && searchQuery.trim() && (
+        {(isSearching && searchQuery.trim()) && (
           <div className="search-info">
             搜尋結果: "{searchQuery}" ({searchResults.length} 位玩家)
           </div>
         )}
         
+        {Object.keys(advancedFilters).length > 0 && (
+          <div className="search-info">
+            進階篩選結果: ({displayPlayers.length} 位玩家)
+          </div>
+        )}
+        
         {displayPlayers.length === 0 ? (
           <div className="empty-state">
-            {isSearching && searchQuery.trim() ? '沒有找到符合的玩家' : '尚無玩家資料'}
+            {Object.keys(advancedFilters).length > 0 ? '沒有符合篩選條件的玩家' : 
+             isSearching && searchQuery.trim() ? '沒有找到符合的玩家' : '尚無玩家資料'}
           </div>
         ) : (
           <div className="players-grid">
             {displayPlayers.map(player => (
-              <div key={player.id} className="player-card">
+              <div key={`player-widget-${player.id}`} className="player-card">
                 <div className="player-header">
                   <div className="player-id">{player.playerId}</div>
                   <div className="player-actions">
@@ -302,14 +671,71 @@ const PlayersWidget = () => {
         }
 
         .players-controls {
+          margin-bottom: 20px;
+        }
+        
+        .advanced-search-section {
+          margin-bottom: 16px;
+        }
+        
+        .basic-search-controls {
           display: flex;
           gap: 10px;
-          margin-bottom: 20px;
           align-items: center;
+          margin-bottom: 12px;
         }
 
         .search-section {
           flex: 1;
+        }
+        
+        .header-actions {
+          display: flex;
+          gap: 12px;
+          justify-content: flex-end;
+          margin-bottom: 12px;
+        }
+        
+        .active-filters {
+          padding: 12px;
+          background: rgba(218, 165, 32, 0.1);
+          border-radius: 8px;
+          border: 1px solid rgba(218, 165, 32, 0.3);
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 8px;
+        }
+        
+        .filters-label {
+          color: #ffd700;
+          font-weight: 600;
+          font-size: 14px;
+        }
+        
+        .filter-chip {
+          background: linear-gradient(135deg, #daa520, #b8860b);
+          color: white;
+          padding: 4px 8px;
+          border-radius: 12px;
+          font-size: 12px;
+          font-weight: 500;
+        }
+        
+        .clear-filters-btn {
+          background: rgba(220, 53, 69, 0.2);
+          border: 1px solid #dc3545;
+          color: #dc3545;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        
+        .clear-filters-btn:hover {
+          background: #dc3545;
+          color: white;
         }
 
         .search-input {

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const SingerListFullScreen = ({ onSelectSinger }) => {
+const SingerListFullScreen = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterGenre, setFilterGenre] = useState('ALL');
 
@@ -99,9 +101,8 @@ const SingerListFullScreen = ({ onSelectSinger }) => {
   });
 
   const handleSingerClick = (singer) => {
-    if (onSelectSinger) {
-      onSelectSinger(singer);
-    }
+    // 跳轉到獨立的歌手歌單頁面，與首頁保持一致
+    navigate(`/singer-songs?id=${singer.id}&name=${encodeURIComponent(singer.name)}`);
   };
 
   return (
@@ -184,7 +185,8 @@ const SingerListFullScreen = ({ onSelectSinger }) => {
           height: 100%;
           display: flex;
           flex-direction: column;
-          background: #f8fafc;
+          background: transparent;
+          color: #ffffff;
         }
 
         .list-header {
@@ -192,22 +194,26 @@ const SingerListFullScreen = ({ onSelectSinger }) => {
           justify-content: space-between;
           align-items: center;
           padding: 24px 32px;
-          background: white;
-          border-bottom: 1px solid #e2e8f0;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+          background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
+          border: 1px solid #daa520;
+          border-bottom: 2px solid #daa520;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
           flex-shrink: 0;
+          border-radius: 8px 8px 0 0;
+          margin-bottom: 20px;
         }
 
         .header-info h2 {
           margin: 0 0 4px 0;
-          color: #1e293b;
+          color: #ffd700;
           font-size: 24px;
           font-weight: 700;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .header-info p {
           margin: 0;
-          color: #64748b;
+          color: #cccccc;
           font-size: 14px;
         }
 
@@ -219,17 +225,23 @@ const SingerListFullScreen = ({ onSelectSinger }) => {
 
         .search-input, .genre-filter {
           padding: 10px 16px;
-          border: 2px solid #e2e8f0;
+          border: 1px solid #daa520;
           border-radius: 8px;
           font-size: 14px;
-          background: white;
+          background: linear-gradient(135deg, #333333, #404040);
+          color: #ffffff;
           transition: all 0.2s ease;
         }
 
         .search-input:focus, .genre-filter:focus {
           outline: none;
-          border-color: #667eea;
-          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+          border-color: #ffd700;
+          box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+          background: linear-gradient(135deg, #404040, #4a4a4a);
+        }
+
+        .search-input::placeholder {
+          color: #aaaaaa;
         }
 
         .search-input {
@@ -246,19 +258,32 @@ const SingerListFullScreen = ({ onSelectSinger }) => {
         }
 
         .singer-card {
-          background: white;
+          background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
+          border: 1px solid #daa520;
           border-radius: 16px;
           padding: 24px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 20px rgba(218, 165, 32, 0.1);
           cursor: pointer;
           transition: all 0.3s ease;
           position: relative;
           overflow: hidden;
         }
 
+        .singer-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #ffd700, transparent);
+          opacity: 0.6;
+        }
+
         .singer-card:hover {
           transform: translateY(-4px);
-          box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 30px rgba(218, 165, 32, 0.3);
+          border-color: #ffd700;
         }
 
         .singer-avatar {
@@ -282,9 +307,10 @@ const SingerListFullScreen = ({ onSelectSinger }) => {
 
         .singer-name {
           margin: 0 0 12px 0;
-          color: #1e293b;
+          color: #ffd700;
           font-size: 20px;
           font-weight: 700;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         .singer-genres {
@@ -296,7 +322,7 @@ const SingerListFullScreen = ({ onSelectSinger }) => {
         }
 
         .genre-tag {
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #daa520, #b8860b);
           color: white;
           padding: 4px 8px;
           border-radius: 12px;
@@ -306,13 +332,13 @@ const SingerListFullScreen = ({ onSelectSinger }) => {
 
         .singer-stats {
           margin-bottom: 12px;
-          color: #64748b;
+          color: #cccccc;
           font-size: 14px;
         }
 
         .singer-description {
           margin: 0;
-          color: #64748b;
+          color: #b8b8b8;
           font-size: 14px;
           line-height: 1.5;
         }
@@ -323,7 +349,7 @@ const SingerListFullScreen = ({ onSelectSinger }) => {
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
+          background: linear-gradient(135deg, rgba(218, 165, 32, 0.9), rgba(184, 134, 11, 0.9));
           color: white;
           display: flex;
           align-items: center;
@@ -332,6 +358,7 @@ const SingerListFullScreen = ({ onSelectSinger }) => {
           transition: opacity 0.3s ease;
           font-weight: 600;
           font-size: 16px;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .singer-card:hover .card-hover-overlay {
@@ -347,24 +374,27 @@ const SingerListFullScreen = ({ onSelectSinger }) => {
 
         .no-results-content {
           text-align: center;
-          color: #64748b;
+          color: #cccccc;
         }
 
         .no-results-icon {
           font-size: 64px;
           margin-bottom: 16px;
+          opacity: 0.7;
         }
 
         .no-results-content h3 {
           margin: 0 0 8px 0;
-          color: #374151;
+          color: #ffd700;
           font-size: 20px;
           font-weight: 600;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         .no-results-content p {
           margin: 0;
           font-size: 16px;
+          color: #b8b8b8;
         }
 
         @media (max-width: 768px) {

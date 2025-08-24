@@ -86,11 +86,7 @@ const SongRequestFullScreen = () => {
 
   const handleConfirmRequest = () => {
     // 這裡處理點歌請求
-    console.log('點歌請求:', {
-      singer: selectedSinger.name,
-      song: selectedSong.title,
-      requester: user.displayName
-    });
+    // 處理點歌請求
     
     // 重置狀態
     setCurrentStep('selectSinger');

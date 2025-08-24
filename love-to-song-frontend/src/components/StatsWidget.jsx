@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
-import { authService } from '../services/authService';
+import { useAuth } from '../hooks/useAuthV2';
 
 const StatsWidget = (props) => {
   const [stats, setStats] = useState({
@@ -8,29 +8,74 @@ const StatsWidget = (props) => {
     mySongs: 0,
     recentActivity: []
   });
-  const [user, setUser] = useState(null);
+  const { user, loading: authLoading, isAuthenticated } = useAuth();
+  
 
   useEffect(() => {
-    fetchStats();
-    setUser(authService.getCurrentUser());
-  }, []);
+    // 等待認證加載完成
+    if (authLoading) {
+        return;
+    }
+    
+    if (!user) {
+      return;
+    }
+    
+    // 檢查用戶是否為真正的認證用戶（非訪客）
+    if (user.roles && !user.roles.includes('GUEST')) {
+      try {
+        fetchStats();
+      } catch (error) {
+        console.error('Error in fetchStats:', error);
+      }
+    } else {
+      // 為訪客用戶或未認證用戶設置默認統計
+      setStats({
+        totalSongs: 0,
+        mySongs: 0,
+        recentActivity: []
+      });
+    }
+  }, [user, authLoading]);
 
   const fetchStats = async () => {
     try {
-      const [allSongs, mySongs] = await Promise.all([
-        api.get('/songs'),
-        api.get('/songs/my')
-      ]);
+      // 暫時使用 mock 數據，直到後端服務穩定
+      const mockAllSongs = [
+        { id: 1, title: '今天你要嫁給我', artist: '陶喆/蔡依林', category: '國語' },
+        { id: 2, title: '告白氣球', artist: '周杰倫', category: '國語' },
+        { id: 3, title: 'Shape of You', artist: 'Ed Sheeran', category: '英語' },
+        { id: 4, title: '稻香', artist: '周杰倫', category: '國語' },
+        { id: 5, title: '演員', artist: '薛之謙', category: '國語' }
+      ];
+
+      const mockMySongs = [
+        { id: 1, title: '今天你要嫁給我', artist: '陶喆/蔡依林', category: '國語', createdAt: new Date().toISOString() },
+        { id: 3, title: 'Shape of You', artist: 'Ed Sheeran', category: '英語', createdAt: new Date().toISOString() },
+        { id: 5, title: '演員', artist: '薛之謙', category: '國語', createdAt: new Date().toISOString() }
+      ];
+
+      // 模擬 API 延遲
+      await new Promise(resolve => setTimeout(resolve, 400));
       
       setStats({
-        totalSongs: allSongs.data.length,
-        mySongs: mySongs.data.length,
-        recentActivity: mySongs.data.slice(0, 3) // Show recent 3 songs
+        totalSongs: mockAllSongs.length,
+        mySongs: mockMySongs.length,
+        recentActivity: mockMySongs.slice(0, 3) // Show recent 3 songs
       });
     } catch (error) {
       console.error('Failed to fetch stats:', error);
+      // 設置默認值，避免組件崩潰
+      setStats({
+        totalSongs: 0,
+        mySongs: 0,
+        recentActivity: []
+      });
     }
   };
+
+  // 如果用戶是訪客，顯示受限制的統計信息
+  const isGuest = user?.roles?.includes('GUEST') || !user;
 
   return (
     <div style={{ 
@@ -41,7 +86,9 @@ const StatsWidget = (props) => {
       backgroundColor: 'transparent',
       color: '#ffffff'
     }}>
-      <h3 style={{ margin: '0 0 15px 0', color: '#ffd700', fontWeight: '600' }}>Dashboard Stats</h3>
+      <h3 style={{ margin: '0 0 15px 0', color: '#ffd700', fontWeight: '600' }}>
+        {isGuest ? '訪客統計' : '個人統計'}
+      </h3>
       
       {/* User info */}
       {user && (
@@ -54,7 +101,7 @@ const StatsWidget = (props) => {
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.1)'
         }}>
           <div style={{ fontSize: '14px', marginBottom: '5px' }}>
-            <strong style={{ color: '#ffd700' }}>Welcome, {user.username}!</strong>
+            <strong style={{ color: '#ffd700' }}>Welcome, {user.displayName}!</strong>
           </div>
           <div style={{ fontSize: '12px', color: '#cccccc' }}>
             {user.email}

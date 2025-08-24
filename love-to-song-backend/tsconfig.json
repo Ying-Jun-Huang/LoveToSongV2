@@ -17,5 +17,10 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "exclude": [
+    "**/*.disabled",
+    "**/*.disabled.ts",
+    "**/*.ts.disabled"
+  ]
 }

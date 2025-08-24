@@ -14,17 +14,31 @@ export class UsersService {
     });
   }
 
-  // Find a user by username
-  async findByUsername(username: string): Promise<User | null> {
+  // Find a user by email with roles (for login with permissions)
+  async findByEmailWithRoles(email: string) {
     return this.prisma.user.findUnique({
-      where: { username },
+      where: { email },
+      include: {
+        userRoles: {
+          include: {
+            role: true
+          }
+        }
+      }
+    });
+  }
+
+  // Find a user by display name (replacing username)
+  async findByDisplayName(displayName: string): Promise<User | null> {
+    return this.prisma.user.findFirst({
+      where: { displayName },
     });
   }
 
   // Create a new user (registration)
-  async createUser(email: string, username: string, passwordHash: string): Promise<User> {
+  async createUser(email: string, displayName: string, passwordHash: string): Promise<User> {
     return this.prisma.user.create({
-      data: { email, username, password: passwordHash }
+      data: { email, displayName, password: passwordHash }
     });
   }
 
@@ -36,15 +50,14 @@ export class UsersService {
   }
 
   // Get all users (for admin management)
-  async getAllUsers(): Promise<User[]> {
+  async getAllUsers() {
     return this.prisma.user.findMany({
       select: {
         id: true,
         email: true,
-        username: true,
-        role: true,
-        description: true,
-        avatar: true,
+        displayName: true,
+        avatarUrl: true,
+        status: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -52,18 +65,18 @@ export class UsersService {
   }
 
   // Update user profile
-  async updateUser(id: number, data: { username?: string, description?: string, avatar?: string }): Promise<User> {
+  async updateUser(id: number, data: { displayName?: string, avatarUrl?: string }): Promise<User> {
     return this.prisma.user.update({
       where: { id },
       data: data,
     });
   }
 
-  // Update user role (admin only)
-  async updateUserRole(id: number, role: string): Promise<User> {
+  // Update user status (admin only)
+  async updateUserStatus(id: number, status: string): Promise<User> {
     return this.prisma.user.update({
       where: { id },
-      data: { role },
+      data: { status: status as any },
     });
   }
 }

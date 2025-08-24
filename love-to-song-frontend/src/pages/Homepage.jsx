@@ -1,17 +1,18 @@
 import React from 'react';
 import HomepageWidget from '../components/HomepageWidget';
-import { authService } from '../services/authService';
+import { useAuth } from '../hooks/useAuthV2';
 import { useNavigate } from 'react-router-dom';
 
 const Homepage = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, loading } = useAuth();
 
-  React.useEffect(() => {
-    // 如果未登入，導向登入頁面
-    if (!authService.isAuthenticated()) {
-      navigate('/login');
-    }
-  }, [navigate]);
+  // 移除強制登入檢查，允許訪客訪問首頁
+  // React.useEffect(() => {
+  //   if (!loading && !isAuthenticated) {
+  //     navigate('/login');
+  //   }
+  // }, [navigate, isAuthenticated, loading]);
 
   const handleGoToDashboard = () => {
     navigate('/dashboard');

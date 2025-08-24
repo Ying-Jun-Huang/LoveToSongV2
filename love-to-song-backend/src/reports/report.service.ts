@@ -165,10 +165,10 @@ export class ReportService {
     // 計算獨特點歌人數
     const uniqueRequesters = new Set(requests.map(r => r.userId)).size;
 
-    // 計算平均等待時間
-    const completedRequestsData = requests.filter(r => r.status === 'COMPLETED' && r.completedAt);
+    // 計算平均等待時間 (使用 updatedAt 作為完成時間的估算)
+    const completedRequestsData = requests.filter(r => r.status === 'COMPLETED');
     const totalWaitTime = completedRequestsData.reduce((sum, r) => {
-      const waitTime = r.completedAt!.getTime() - r.createdAt.getTime();
+      const waitTime = r.updatedAt.getTime() - r.createdAt.getTime();
       return sum + waitTime;
     }, 0);
     const averageWaitTime = completedRequestsData.length > 0 
@@ -226,7 +226,7 @@ export class ReportService {
         title: event.title,
         startsAt: event.startsAt,
         endsAt: event.endsAt,
-        venue: event.venue,
+        venue: event.venue || undefined,
         host: event.host
       },
       stats: {
@@ -364,7 +364,7 @@ export class ReportService {
       singer: {
         id: singer.id,
         stageName: singer.stageName,
-        bio: singer.bio
+        bio: singer.bio || undefined
       },
       stats: {
         totalEvents,
@@ -498,9 +498,10 @@ export class ReportService {
         }
       }),
       
+      // Note: lastLoginAt field doesn't exist in User model, using updatedAt as approximation
       this.prisma.user.count({
         where: {
-          lastLoginAt: { gte: thisWeek }
+          updatedAt: { gte: thisWeek }
         }
       }),
       
@@ -518,7 +519,7 @@ export class ReportService {
       })
     ]);
 
-    const requesterIds = topRequestersData.map(item => item.userId);
+    const requesterIds = topRequestersData.map(item => item.userId).filter(id => id !== null) as number[];
     const requesters = await this.prisma.user.findMany({
       where: { id: { in: requesterIds } },
       select: { id: true, displayName: true }
@@ -624,8 +625,16 @@ export class ReportService {
             displayName: true,
             status: true,
             createdAt: true,
-            lastLoginAt: true,
-            roles: { select: { role: true } }
+            // lastLoginAt field doesn't exist, using updatedAt instead
+            updatedAt: true,
+            // Note: User model doesn't have direct roles relation, need to use userRoles
+            userRoles: { 
+              select: { 
+                role: { 
+                  select: { name: true, displayName: true } 
+                } 
+              } 
+            }
           }
         });
         break;
@@ -685,11 +694,11 @@ export class ReportService {
       case 'events':
         return ['ID', 'Title', 'Host', 'Venue', 'Starts At', 'Ends At', 'Status', 'Total Requests', 'Total Singers'];
       case 'requests':
-        return ['ID', 'Song Title', 'Artist', 'Singer', 'Requester', 'Event', 'Status', 'Created At', 'Completed At'];
+        return ['ID', 'Song Title', 'Artist', 'Singer', 'Requester', 'Event', 'Status', 'Created At', 'Updated At'];
       case 'wishsongs':
         return ['ID', 'Title', 'Original Artist', 'Submitter', 'Singer', 'Status', 'Created At'];
       case 'users':
-        return ['ID', 'Email', 'Display Name', 'Status', 'Roles', 'Created At', 'Last Login'];
+        return ['ID', 'Email', 'Display Name', 'Status', 'Roles', 'Created At', 'Updated At'];
       case 'singers':
         return ['ID', 'Stage Name', 'User', 'Bio', 'Is Active', 'Total Songs', 'Total Requests', 'Total Events'];
       default:
@@ -727,7 +736,7 @@ export class ReportService {
           item.event?.title || '',
           item.status,
           item.createdAt?.toISOString() || '',
-          item.completedAt?.toISOString() || ''
+          item.updatedAt?.toISOString() || ''
         ].map(escapeField);
 
       case 'wishsongs':
@@ -747,9 +756,9 @@ export class ReportService {
           item.email,
           item.displayName,
           item.status,
-          item.roles?.map((r: any) => r.role).join(';') || '',
+          item.userRoles?.map((ur: any) => ur.role.name).join(';') || '',
           item.createdAt?.toISOString() || '',
-          item.lastLoginAt?.toISOString() || ''
+          item.updatedAt?.toISOString() || ''
         ].map(escapeField);
 
       case 'singers':

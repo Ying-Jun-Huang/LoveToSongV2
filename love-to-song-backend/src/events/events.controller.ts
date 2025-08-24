@@ -135,14 +135,21 @@ export class EventsController {
     return await this.eventsService.manageEventSingers(req.user.authContext, assignSingersDto);
   }
 
-  // 獲取活動統計
-  @Get('stats/:id?')
+  // 獲取所有活動統計
+  @Get('stats')
+  @RequirePermission(ENTITIES.ANALYTICS, ACTIONS.VIEW)
+  async getAllEventStats(@Request() req) {
+    return await this.eventsService.getEventStats(req.user.authContext);
+  }
+
+  // 獲取特定活動統計
+  @Get('stats/:id')
   @RequirePermission(ENTITIES.ANALYTICS, ACTIONS.VIEW)
   async getEventStats(
     @Request() req,
-    @Param('id') id?: string
+    @Param('id') id: string
   ) {
-    const eventId = id ? parseInt(id) : undefined;
+    const eventId = parseInt(id);
     return await this.eventsService.getEventStats(req.user.authContext, eventId);
   }
 

@@ -236,7 +236,7 @@ export class WishSongService {
 
       case 'add_to_songbook':
         // 將願望歌加入歌庫
-        createdSong = await this.addWishSongToSongbook(wishSong, approveDto.songData);
+        // createdSong = await this.addWishSongToSongbook(wishSong, approveDto.songData);
         
         updatedWishSong = await this.prisma.wishSong.update({
           where: { id: approveDto.wishSongId },

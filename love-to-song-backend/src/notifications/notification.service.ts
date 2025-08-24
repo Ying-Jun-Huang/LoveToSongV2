@@ -5,23 +5,15 @@ import { AuthContext, PermissionService, ENTITIES, ACTIONS } from '../auth/rbac-
 export interface CreateNotificationDto {
   userId: number;
   title: string;
-  message: string;
-  type: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'EVENT' | 'REQUEST' | 'WISH_SONG';
-  entityType?: string;
-  entityId?: number;
-  actionUrl?: string;
-  priority: 'LOW' | 'NORMAL' | 'HIGH' | 'URGENT';
-  scheduledAt?: Date;
-  expiresAt?: Date;
+  content: string;
+  type: 'SYSTEM' | 'REQUEST' | 'WISH_SONG' | 'EVENT' | 'PERSONAL';
+  payload?: string;
 }
 
 export interface NotificationFilters {
   userId?: number;
   type?: string;
-  isRead?: boolean;
-  priority?: string;
-  entityType?: string;
-  entityId?: number;
+  isRead?: boolean; // This will be converted to readAt check internally
   startDate?: Date;
   endDate?: Date;
   limit?: number;
@@ -30,13 +22,11 @@ export interface NotificationFilters {
 
 export interface BroadcastNotificationDto {
   title: string;
-  message: string;
-  type: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'EVENT' | 'REQUEST' | 'WISH_SONG';
+  content: string;
+  type: 'SYSTEM' | 'REQUEST' | 'WISH_SONG' | 'EVENT' | 'PERSONAL';
   targetRoles?: string[];
   targetUserIds?: number[];
-  priority: 'LOW' | 'NORMAL' | 'HIGH' | 'URGENT';
-  actionUrl?: string;
-  expiresAt?: Date;
+  payload?: string;
 }
 
 @Injectable()
@@ -50,16 +40,9 @@ export class NotificationService {
         data: {
           userId: notificationData.userId,
           title: notificationData.title,
-          message: notificationData.message,
+          content: notificationData.content,
           type: notificationData.type,
-          entityType: notificationData.entityType,
-          entityId: notificationData.entityId,
-          actionUrl: notificationData.actionUrl,
-          priority: notificationData.priority,
-          scheduledAt: notificationData.scheduledAt || new Date(),
-          expiresAt: notificationData.expiresAt,
-          isRead: false,
-          isDelivered: false
+          payload: notificationData.payload
         },
         include: {
           user: {
@@ -82,16 +65,9 @@ export class NotificationService {
         data: notifications.map(n => ({
           userId: n.userId,
           title: n.title,
-          message: n.message,
+          content: n.content,
           type: n.type,
-          entityType: n.entityType,
-          entityId: n.entityId,
-          actionUrl: n.actionUrl,
-          priority: n.priority,
-          scheduledAt: n.scheduledAt || new Date(),
-          expiresAt: n.expiresAt,
-          isRead: false,
-          isDelivered: false
+          payload: n.payload
         }))
       });
 
@@ -117,7 +93,7 @@ export class NotificationService {
       // 根據角色查找用戶
       const users = await this.prisma.userRole.findMany({
         where: {
-          role: { in: broadcastData.targetRoles }
+          role: { name: { in: broadcastData.targetRoles } }
         },
         select: { userId: true }
       });
@@ -135,11 +111,9 @@ export class NotificationService {
     const notifications: CreateNotificationDto[] = targetUserIds.map(userId => ({
       userId,
       title: broadcastData.title,
-      message: broadcastData.message,
+      content: broadcastData.content,
       type: broadcastData.type,
-      priority: broadcastData.priority,
-      actionUrl: broadcastData.actionUrl,
-      expiresAt: broadcastData.expiresAt
+      payload: broadcastData.payload
     }));
 
     const result = await this.createBatchNotifications(notifications);
@@ -163,11 +137,7 @@ export class NotificationService {
     }
 
     let whereClause: any = {
-      userId,
-      OR: [
-        { expiresAt: null },
-        { expiresAt: { gt: new Date() } }
-      ]
+      userId
     };
 
     // 應用篩選條件
@@ -176,19 +146,7 @@ export class NotificationService {
     }
 
     if (filters.isRead !== undefined) {
-      whereClause.isRead = filters.isRead;
-    }
-
-    if (filters.priority) {
-      whereClause.priority = filters.priority;
-    }
-
-    if (filters.entityType) {
-      whereClause.entityType = filters.entityType;
-    }
-
-    if (filters.entityId) {
-      whereClause.entityId = filters.entityId;
+      whereClause.readAt = filters.isRead ? { not: null } : null;
     }
 
     if (filters.startDate || filters.endDate) {
@@ -208,8 +166,7 @@ export class NotificationService {
       this.prisma.notification.findMany({
         where: whereClause,
         orderBy: [
-          { priority: 'desc' },
-          { scheduledAt: 'desc' }
+          { createdAt: 'desc' }
         ],
         take: limit,
         skip: offset
@@ -218,7 +175,7 @@ export class NotificationService {
       this.prisma.notification.count({ 
         where: { 
           ...whereClause, 
-          isRead: false 
+          readAt: null 
         } 
       })
     ]);
@@ -255,7 +212,6 @@ export class NotificationService {
         userId: authContext.userId
       },
       data: {
-        isRead: true,
         readAt: new Date()
       }
     });
@@ -271,10 +227,9 @@ export class NotificationService {
     const result = await this.prisma.notification.updateMany({
       where: {
         userId: authContext.userId,
-        isRead: false
+        readAt: null
       },
       data: {
-        isRead: true,
         readAt: new Date()
       }
     });
@@ -319,9 +274,13 @@ export class NotificationService {
       throw new Error('無權限清理過期通知');
     }
 
+    // 清理超過30天的已讀通知
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
     const result = await this.prisma.notification.deleteMany({
       where: {
-        expiresAt: { lt: new Date() }
+        readAt: { not: null, lt: thirtyDaysAgo }
       }
     });
 
@@ -346,7 +305,6 @@ export class NotificationService {
       total,
       unread,
       byType,
-      byPriority,
       recent
     ] = await Promise.all([
       // 總通知數
@@ -356,19 +314,12 @@ export class NotificationService {
 
       // 未讀通知數
       this.prisma.notification.count({
-        where: { userId, isRead: false }
+        where: { userId, readAt: null }
       }),
 
       // 按類型統計
       this.prisma.notification.groupBy({
         by: ['type'],
-        where: { userId },
-        _count: { id: true }
-      }),
-
-      // 按優先級統計
-      this.prisma.notification.groupBy({
-        by: ['priority'],
         where: { userId },
         _count: { id: true }
       }),
@@ -392,10 +343,6 @@ export class NotificationService {
       byType: byType.reduce((acc, stat) => {
         acc[stat.type] = stat._count.id;
         return acc;
-      }, {} as Record<string, number>),
-      byPriority: byPriority.reduce((acc, stat) => {
-        acc[stat.priority] = stat._count.id;
-        return acc;
       }, {} as Record<string, number>)
     };
   }
@@ -414,12 +361,9 @@ export class NotificationService {
       await this.createNotification({
         userId: event.hostUserId,
         title: '新的點歌請求',
-        message: `${requesterName} 在活動「${eventTitle}」中點了「${songTitle}」`,
+        content: `${requesterName} 在活動「${eventTitle}」中點了「${songTitle}」`,
         type: 'REQUEST',
-        entityType: 'REQUEST',
-        entityId: requestId,
-        priority: 'NORMAL',
-        actionUrl: `/queue/event/${event}#request-${requestId}`
+        payload: JSON.stringify({ requestId, eventTitle, songTitle, requesterName })
       });
     }
   }
@@ -435,12 +379,9 @@ export class NotificationService {
       await this.createNotification({
         userId: singer.user.id,
         title: '新的點歌指派',
-        message: `您被指派演唱「${songTitle}」`,
+        content: `您被指派演唱「${songTitle}」`,
         type: 'REQUEST',
-        entityType: 'REQUEST',
-        entityId: requestId,
-        priority: 'HIGH',
-        actionUrl: `/queue#request-${requestId}`
+        payload: JSON.stringify({ requestId, songTitle, singerId })
       });
     }
   }
@@ -458,31 +399,32 @@ export class NotificationService {
         await this.createNotification({
           userId: singer.user.id,
           title: '新的願望歌',
-          message: `${submitterName} 希望您演唱「${title}」`,
+          content: `${submitterName} 希望您演唱「${title}」`,
           type: 'WISH_SONG',
-          entityType: 'WISH_SONG',
-          entityId: wishSongId,
-          priority: 'NORMAL',
-          actionUrl: `/wishsongs/assigned-to-me#${wishSongId}`
+          payload: JSON.stringify({ wishSongId, title, submitterName, singerId })
         });
       }
     }
 
     // 通知管理員
     const admins = await this.prisma.userRole.findMany({
-      where: { role: 'SUPER_ADMIN' },
-      include: { user: true }
+      where: { 
+        role: { 
+          name: 'SUPER_ADMIN' 
+        } 
+      },
+      include: { 
+        user: true,
+        role: true
+      }
     });
 
     const adminNotifications: CreateNotificationDto[] = admins.map(admin => ({
       userId: admin.user.id,
       title: '新的願望歌待審核',
-      message: `${submitterName} 提交了願望歌「${title}」`,
+      content: `${submitterName} 提交了願望歌「${title}」`,
       type: 'WISH_SONG',
-      entityType: 'WISH_SONG',
-      entityId: wishSongId,
-      priority: 'LOW',
-      actionUrl: `/wishsongs#${wishSongId}`
+      payload: JSON.stringify({ wishSongId, title, submitterName })
     }));
 
     await this.createBatchNotifications(adminNotifications);
@@ -495,12 +437,9 @@ export class NotificationService {
     await this.createNotification({
       userId: submitterId,
       title: `願望歌審核${status}`,
-      message: `您的願望歌「${title}」已被${status}`,
-      type,
-      entityType: 'WISH_SONG',
-      entityId: wishSongId,
-      priority: 'NORMAL',
-      actionUrl: `/wishsongs/my-wishsongs#${wishSongId}`
+      content: `您的願望歌「${title}」已被${status}`,
+      type: 'SYSTEM',
+      payload: JSON.stringify({ wishSongId, title, approved, status })
     });
   }
 
@@ -519,12 +458,9 @@ export class NotificationService {
     const notifications: CreateNotificationDto[] = eventSingers.map(es => ({
       userId: es.singer.user.id,
       title: '活動已開始',
-      message: `活動「${eventTitle}」現在開始了！`,
+      content: `活動「${eventTitle}」現在開始了！`,
       type: 'EVENT',
-      entityType: 'EVENT',
-      entityId: eventId,
-      priority: 'HIGH',
-      actionUrl: `/events/${eventId}`
+      payload: JSON.stringify({ eventId, eventTitle })
     }));
 
     await this.createBatchNotifications(notifications);
@@ -544,12 +480,9 @@ export class NotificationService {
     const notifications: CreateNotificationDto[] = eventSingers.map(es => ({
       userId: es.singer.user.id,
       title: '活動已結束',
-      message: `活動「${eventTitle}」已結束，共完成 ${completedSongs} 首歌曲`,
+      content: `活動「${eventTitle}」已結束，共完成 ${completedSongs} 首歌曲`,
       type: 'EVENT',
-      entityType: 'EVENT',
-      entityId: eventId,
-      priority: 'NORMAL',
-      actionUrl: `/events/${eventId}/summary`
+      payload: JSON.stringify({ eventId, eventTitle, completedSongs })
     }));
 
     await this.createBatchNotifications(notifications);
@@ -566,11 +499,9 @@ export class NotificationService {
     const notifications: CreateNotificationDto[] = activeUsers.map(user => ({
       userId: user.id,
       title,
-      message,
-      type: 'WARNING',
-      priority: 'HIGH',
-      scheduledAt,
-      expiresAt: new Date(scheduledAt.getTime() + 24 * 60 * 60 * 1000) // 24小時後過期
+      content: message,
+      type: 'SYSTEM',
+      payload: JSON.stringify({ scheduledAt: scheduledAt.toISOString(), maintenanceType: 'scheduled' })
     }));
 
     await this.createBatchNotifications(notifications);

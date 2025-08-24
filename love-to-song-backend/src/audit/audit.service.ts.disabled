@@ -167,21 +167,21 @@ export class AuditService {
 
     const auditLogs = await this.prisma.auditLog.findMany({
       where: {
-        entityType,
+        entity: entityType,
         entityId
       },
       include: {
-        user: {
+        actor: {
           select: { id: true, displayName: true }
         }
       },
-      orderBy: { timestamp: 'desc' },
+      orderBy: { createdAt: 'desc' },
       take: limit
     });
 
     return auditLogs.map(log => ({
       ...log,
-      details: log.details ? JSON.parse(log.details) : null
+      details: log.before || log.after ? { before: log.before, after: log.after } : null
     }));
   }
 
@@ -199,10 +199,10 @@ export class AuditService {
     startDate.setDate(startDate.getDate() - days);
 
     const stats = await this.prisma.auditLog.groupBy({
-      by: ['action', 'result'],
+      by: ['action'],
       where: {
-        userId,
-        timestamp: { gte: startDate }
+        actorUserId: targetUserId || authContext.userId,
+        createdAt: { gte: startDate }
       },
       _count: {
         id: true
@@ -210,10 +210,10 @@ export class AuditService {
     });
 
     const dailyStats = await this.prisma.auditLog.groupBy({
-      by: ['timestamp'],
+      by: ['createdAt'],
       where: {
-        userId,
-        timestamp: { gte: startDate }
+        actorUserId: targetUserId || authContext.userId,
+        createdAt: { gte: startDate }
       },
       _count: {
         id: true

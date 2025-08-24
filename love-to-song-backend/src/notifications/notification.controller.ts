@@ -33,14 +33,12 @@ export class NotificationController {
     @Request() req,
     @Query('type') type?: string,
     @Query('isRead') isRead?: string,
-    @Query('priority') priority?: string,
     @Query('limit') limit?: number,
     @Query('offset') offset?: number
   ) {
     const filters: NotificationFilters = {
       type,
       isRead: isRead ? isRead === 'true' : undefined,
-      priority,
       limit: limit ? parseInt(limit.toString()) : undefined,
       offset: offset ? parseInt(offset.toString()) : undefined
     };
@@ -56,7 +54,6 @@ export class NotificationController {
     @Param('userId', ParseIntPipe) userId: number,
     @Query('type') type?: string,
     @Query('isRead') isRead?: string,
-    @Query('priority') priority?: string,
     @Query('limit') limit?: number,
     @Query('offset') offset?: number
   ) {
@@ -64,7 +61,6 @@ export class NotificationController {
       userId,
       type,
       isRead: isRead ? isRead === 'true' : undefined,
-      priority,
       limit: limit ? parseInt(limit.toString()) : undefined,
       offset: offset ? parseInt(offset.toString()) : undefined
     };
@@ -106,8 +102,7 @@ export class NotificationController {
       title: args[1].title,
       targetRoles: args[1].targetRoles,
       targetUserIds: args[1].targetUserIds,
-      type: args[1].type,
-      priority: args[1].priority
+      type: args[1].type
     }),
     sensitive: true
   })
@@ -179,9 +174,8 @@ export class NotificationController {
     return await this.notificationService.createNotification({
       userId: req.user.authContext.userId,
       title: '測試通知',
-      message: '這是一條測試通知，用於驗證通知系統是否正常工作。',
-      type: 'INFO',
-      priority: 'NORMAL'
+      content: '這是一條測試通知，用於驗證通知系統是否正常工作。',
+      type: 'SYSTEM'
     });
   }
 }

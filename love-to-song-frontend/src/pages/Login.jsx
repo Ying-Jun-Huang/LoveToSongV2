@@ -9,14 +9,14 @@ const Login = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, loading: authLoading } = useAuth();
 
-  // 如果已經登入，直接跳轉到 dashboard
+  // 如果已經登入，直接跳轉到 dashboard (等待認證載入完成)
   useEffect(() => {
-    if (isAuthenticated) {
+    if (!authLoading && isAuthenticated) {
       navigate('/dashboard');
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, authLoading, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,6 +37,45 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  // 顯示載入狀態
+  if (authLoading) {
+    return (
+      <div className="login-page">
+        <div className="login-container">
+          <div className="login-card">
+            <div className="login-header">
+              <h2>載入中...</h2>
+              <p>正在初始化系統</p>
+            </div>
+          </div>
+        </div>
+        <style jsx="true">{`
+          .login-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+          }
+          .login-container { width: 100%; max-width: 400px; }
+          .login-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+          }
+          .login-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
     <div className="login-page">
@@ -107,10 +146,10 @@ const Login = () => {
           <div className="test-accounts">
             <h4>測試帳號 (密碼都是: 123456)</h4>
             <div className="test-account-list">
-              <div>• super@test.com (高層管理員)</div>
-              <div>• host@test.com (主持管理)</div>
-              <div>• singer@test.com (歌手)</div>
-              <div>• player@test.com (玩家)</div>
+              <div>• superadmin@test.com (超級管理員)</div>
+              <div>• admin@test.com (管理員)</div>
+              <div>• manager@test.com (經理)</div>
+              <div>• user@test.com (普通用戶)</div>
               <div>• guest@test.com (訪客)</div>
             </div>
             <div className="hint">
@@ -132,7 +171,7 @@ const Login = () => {
         
         .login-container {
           width: 100%;
-          max-width: 400px;
+          max-width: 480px;
         }
         
         .login-card {
@@ -162,7 +201,7 @@ const Login = () => {
         }
         
         .login-form {
-          padding: 30px 20px 20px;
+          padding: 30px 30px 20px;
         }
         
         .form-group {
@@ -242,7 +281,7 @@ const Login = () => {
         }
 
         .guest-access {
-          padding: 20px 20px 10px;
+          padding: 20px 30px 10px;
           text-align: center;
         }
 
@@ -304,7 +343,7 @@ const Login = () => {
         }
         
         .test-accounts {
-          padding: 20px;
+          padding: 20px 30px;
           background: #f9fafb;
           border-top: 1px solid #e5e7eb;
         }

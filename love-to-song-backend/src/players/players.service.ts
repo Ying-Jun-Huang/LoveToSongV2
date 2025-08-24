@@ -3,27 +3,23 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Player } from '@prisma/client';
 
 export interface CreatePlayerDto {
-  playerId: string;
-  playerIdAlt?: string;
+  userId?: number;
   name: string;
   nickname?: string;
-  gender?: string;
+  level?: string;
   birthday?: string;
-  joinDate?: string;
-  note?: string;
-  crownDate?: string;
+  notes?: string;
+  photoKey?: string;
 }
 
 export interface UpdatePlayerDto {
-  playerIdAlt?: string;
   name?: string;
   nickname?: string;
-  gender?: string;
+  level?: string;
   birthday?: string;
-  joinDate?: string;
-  note?: string;
-  crownDate?: string;
-  photoPath?: string;
+  notes?: string;
+  photoKey?: string;
+  isActive?: boolean;
 }
 
 @Injectable()
@@ -35,7 +31,8 @@ export class PlayersService {
     return this.prisma.player.findMany({
       orderBy: { createdAt: 'desc' },
       include: {
-        songRequests: {
+        user: true,
+        requests: {
           include: {
             song: true
           }
@@ -49,7 +46,8 @@ export class PlayersService {
     return this.prisma.player.findUnique({
       where: { id },
       include: {
-        songRequests: {
+        user: true,
+        requests: {
           include: {
             song: true
           },
@@ -59,38 +57,34 @@ export class PlayersService {
     });
   }
 
-  // 根據 playerId 獲取玩家
-  async findByPlayerId(playerId: string): Promise<Player | null> {
-    return this.prisma.player.findUnique({
-      where: { playerId }
+  // 根據名字搜尋玩家
+  async findByName(name: string): Promise<Player | null> {
+    return this.prisma.player.findFirst({
+      where: { name }
     });
   }
 
   // 創建新玩家
   async create(createPlayerDto: CreatePlayerDto): Promise<Player> {
-    const { birthday, joinDate, crownDate, ...otherData } = createPlayerDto;
+    const { birthday, ...otherData } = createPlayerDto;
     
     return this.prisma.player.create({
       data: {
         ...otherData,
         birthday: birthday ? new Date(birthday) : null,
-        joinDate: joinDate ? new Date(joinDate) : null,
-        crownDate: crownDate ? new Date(crownDate) : null,
       }
     });
   }
 
   // 更新玩家資訊
   async update(id: number, updatePlayerDto: UpdatePlayerDto): Promise<Player> {
-    const { birthday, joinDate, crownDate, ...otherData } = updatePlayerDto;
+    const { birthday, ...otherData } = updatePlayerDto;
 
     return this.prisma.player.update({
       where: { id },
       data: {
         ...otherData,
         birthday: birthday ? new Date(birthday) : undefined,
-        joinDate: joinDate ? new Date(joinDate) : undefined,
-        crownDate: crownDate ? new Date(crownDate) : undefined,
       }
     });
   }
@@ -102,24 +96,11 @@ export class PlayersService {
     });
   }
 
-  // 更新玩家點歌次數
-  async updateSongCount(playerId: number, increment: number = 1): Promise<Player> {
-    return this.prisma.player.update({
-      where: { id: playerId },
-      data: {
-        songCount: {
-          increment
-        }
-      }
-    });
-  }
-
   // 搜索玩家
   async search(query: string): Promise<Player[]> {
     return this.prisma.player.findMany({
       where: {
         OR: [
-          { playerId: { contains: query } },
           { name: { contains: query } },
           { nickname: { contains: query } },
         ]
@@ -131,8 +112,8 @@ export class PlayersService {
   // 獲取玩家統計
   async getStats() {
     const totalPlayers = await this.prisma.player.count();
-    const totalRequests = await this.prisma.songRequest.count();
-    const activeToday = await this.prisma.songRequest.count({
+    const totalRequests = await this.prisma.request.count();
+    const activeToday = await this.prisma.request.count({
       where: {
         requestedAt: {
           gte: new Date(new Date().setHours(0, 0, 0, 0))

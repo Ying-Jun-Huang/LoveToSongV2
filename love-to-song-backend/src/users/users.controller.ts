@@ -12,12 +12,34 @@ export class UsersController {
 
   // Example: Registration endpoint (open to anyone)
   @Post('register')
-  async register(@Body() body: { email: string, username: string, password: string }) {
-    const { email, username, password } = body;
-    const hash = await bcrypt.hash(password, 10);
-    const user = await this.usersService.createUser(email, username, hash);
-    // Do not return password hash
-    return { id: user.id, username: user.username, email: user.email };
+  async register(@Body() body: { email: string, displayName: string, password: string }) {
+    const { email, displayName, password } = body;
+    
+    // Check if user with email already exists
+    const existingUser = await this.usersService.findByEmail(email);
+    if (existingUser) {
+      throw new Error('Email already registered');
+    }
+    
+    // Check if displayName already exists
+    const existingDisplayName = await this.usersService.findByDisplayName(displayName);
+    if (existingDisplayName) {
+      throw new Error('Display name already taken');
+    }
+    
+    try {
+      const hash = await bcrypt.hash(password, 10);
+      const user = await this.usersService.createUser(email, displayName, hash);
+      // Do not return password hash
+      return { id: user.id, displayName: user.displayName, email: user.email };
+    } catch (error) {
+      // Handle Prisma constraint errors
+      if (error.code === 'P2002') {
+        const field = error.meta?.target?.[0];
+        throw new Error(`${field} already exists`);
+      }
+      throw error;
+    }
   }
 
   // Get all users (僅管理員以上可查看)
@@ -41,7 +63,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.USER, Role.MANAGER, Role.ADMIN, Role.SUPER_ADMIN)
   @Patch('me')
-  async updateProfile(@Request() req, @Body() body: { username?: string, description?: string, avatar?: string }) {
+  async updateProfile(@Request() req, @Body() body: { displayName?: string, avatarUrl?: string }) {
     const userId = req.user.id;
     const updatedUser = await this.usersService.updateUser(userId, body);
     // Do not return password hash
@@ -49,13 +71,13 @@ export class UsersController {
     return userWithoutPassword;
   }
 
-  // Update user role (僅超級管理員)
+  // Update user status (僅超級管理員)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.SUPER_ADMIN)
-  @Patch(':id/role')
-  async updateUserRole(@Request() req, @Body() body: { role: Role }) {
+  @Patch(':id/status')
+  async updateUserStatus(@Request() req, @Body() body: { status: string }) {
     const { id } = req.params;
-    const updatedUser = await this.usersService.updateUserRole(parseInt(id), body.role);
+    const updatedUser = await this.usersService.updateUserStatus(parseInt(id), body.status);
     const { password, ...userWithoutPassword } = updatedUser;
     return userWithoutPassword;
   }

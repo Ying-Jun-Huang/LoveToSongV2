@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "愛唱歌",
+  "name": "愛唱歌 - 即時KTV點歌系統",
+  "description": "專業的即時KTV點歌平台，支持多人協作、即時更新、跨設備同步",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,16 +11,62 @@
     {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "maskable any"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "maskable any"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#4caf50",
+  "background_color": "#1e1e1e",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "zh-TW",
+  "categories": ["entertainment", "music", "social"],
+  "shortcuts": [
+    {
+      "name": "快速點歌",
+      "short_name": "點歌",
+      "description": "快速進入點歌界面",
+      "url": "/request",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "查看排隊",
+      "short_name": "排隊",
+      "description": "查看當前排隊狀況",
+      "url": "/queue",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "share_target": {
+    "action": "/share",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text", 
+      "url": "url"
+    }
+  }
 }

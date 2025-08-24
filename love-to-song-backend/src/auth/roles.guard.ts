@@ -31,7 +31,18 @@ export class RolesGuard implements CanActivate {
       [Role.GUEST]: 5,
     };
 
-    const userRoleLevel = roleHierarchy[user.role as Role];
+    // 支持從 JWT payload 或用戶對象獲取角色
+    let userRole = user.role;
+    if (!userRole && user.userRoles && user.userRoles.length > 0) {
+      userRole = user.userRoles[0].role.name;
+    }
+    
+    const userRoleLevel = roleHierarchy[userRole as Role];
+    
+    // 如果找不到用戶角色，默認為最低權限
+    if (userRoleLevel === undefined) {
+      return false;
+    }
     
     // 檢查用戶是否有足夠的權限
     return requiredRoles.some(role => {

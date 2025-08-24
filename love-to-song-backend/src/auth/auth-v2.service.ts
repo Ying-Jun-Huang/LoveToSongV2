@@ -99,7 +99,7 @@ export class AuthV2Service {
     const roles = user.userRoles.map(ur => ur.role.name);
 
     // 合併所有角色的權限
-    const allPermissions = [];
+    const allPermissions: any[] = [];
     for (const userRole of user.userRoles) {
       if (userRole.role.permissions) {
         try {
@@ -112,7 +112,7 @@ export class AuthV2Service {
     }
 
     // 獲取用戶參與的活動ID（主持的活動 + 歌手參與的活動）
-    const eventIds = [];
+    const eventIds: number[] = [];
     
     // 主持的活動
     eventIds.push(...user.events.map(e => e.id));

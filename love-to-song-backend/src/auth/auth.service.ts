@@ -13,7 +13,7 @@ export class AuthService {
 
   // Validate user credentials (for login)
   async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findByEmail(email);
+    const user = await this.usersService.findByEmailWithRoles(email);
     if (user && await bcrypt.compare(pass, user.password)) {
       // Password is correct
       const { password, ...result } = user;
@@ -24,11 +24,26 @@ export class AuthService {
 
   // Generate a JWT for a user (called after validation)
   async login(user: any) {
-    const payload = { email: user.email, sub: user.id };
+    // 獲取用戶的主要角色
+    const primaryRole = user.userRoles && user.userRoles.length > 0 
+      ? user.userRoles[0].role.name 
+      : 'GUEST';
+    
+    const payload = { 
+      email: user.email, 
+      sub: user.id,
+      role: primaryRole
+    };
+    
     // sign the payload into a JWT string
     return {
       token: this.jwtService.sign(payload),
-      user: { id: user.id, email: user.email, username: user.username },
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        displayName: user.displayName,
+        role: primaryRole
+      },
     };
   }
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react';
+import websocketService from '../services/websocket-simple';
 
 // V2 角色定義 - 對應後端 RBAC 系統
 export const ROLES_V2 = {
@@ -16,7 +17,10 @@ export const ROLES_V2 = {
       'WISH_SONG_MANAGEMENT',
       'AUDIT_LOGS',
       'SYSTEM_STATS',
-      'DATA_EXPORT'
+      'DATA_EXPORT',
+      'SONG_MANAGEMENT',
+      'VIEW_SINGERS',
+      'SONG_REQUEST'
     ]
   },
   HOST_ADMIN: {
@@ -41,7 +45,9 @@ export const ROLES_V2 = {
       'WISH_SONG_RESPONSE',
       'SONG_MANAGEMENT',
       'MY_REQUESTS',
-      'MY_PROFILE'
+      'MY_PROFILE',
+      'EVENT_STATS',  // 允許歌手查看統計資訊
+      'SINGER_MANAGEMENT'  // 允許歌手管理其他歌手
     ]
   },
   PLAYER: {
@@ -53,7 +59,8 @@ export const ROLES_V2 = {
       'SONG_REQUEST',
       'WISH_SONG_SUBMIT',
       'MY_PROFILE',
-      'VIEW_SINGERS'
+      'VIEW_SINGERS',
+      'EVENT_STATS'  // 允許玩家查看統計資訊
     ]
   },
   GUEST: {
@@ -91,34 +98,102 @@ export const useAuthV2 = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [permissions, setPermissions] = useState([]);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    initializeAuth();
-  }, []);
+    if (!initialized) {
+      initializeAuth();
+    }
+    
+    // 當窗口重新獲得焦點時，檢查認證狀態是否仍然有效
+    const handleFocus = () => {
+      const token = localStorage.getItem('token');
+      const userInfo = localStorage.getItem('userInfo');
+      
+      if (token && userInfo && !user) {
+        // Check auth state on window focus
+        // 只有當前沒有用戶但 localStorage 有數據時才重新初始化
+        initializeAuth();
+      }
+    };
+    
+    // 監聽 localStorage 變化，同步多個標籤頁的認證狀態
+    const handleStorageChange = (e) => {
+      if (e.key === 'token' || e.key === 'userInfo') {
+        // Sync auth state across tabs
+        initializeAuth();
+      }
+    };
+    
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // 只在組件加載時執行一次
 
   const initializeAuth = async () => {
+    // Initialize authentication
     try {
       const token = localStorage.getItem('token');
       const userInfo = localStorage.getItem('userInfo');
-
-      if (token && userInfo) {
-        const parsedUser = JSON.parse(userInfo);
-        setUser(parsedUser);
-        calculatePermissions(parsedUser.roles || []);
-      } else {
-        // 沒有登入資訊時，設置為訪客模式
-        const guestUser = {
-          id: 0,
-          email: 'guest@system.local',
-          displayName: '訪客用戶',
-          roles: ['GUEST'],
-          status: 'ACTIVE'
-        };
-        setUser(guestUser);
-        calculatePermissions(['GUEST']);
+      
+      // 檢查是否為舊的 mock token，如果是就清除
+      if (token && token.startsWith('mock_jwt_token_')) {
+        console.log('[AUTH] Removing old mock token');
+        localStorage.removeItem('token');
+        localStorage.removeItem('userInfo');
+      } else if (token && userInfo) {
+        try {
+          const parsedUser = JSON.parse(userInfo);
+          // Restore user from localStorage
+          
+          // 驗證用戶數據的完整性
+          if (parsedUser.id && parsedUser.displayName && parsedUser.roles) {
+            setUser(parsedUser);
+            calculatePermissions(parsedUser.roles || []);
+            
+            // 嘗試建立 WebSocket 連接
+            if (token && !parsedUser.roles.includes('GUEST')) {
+              websocketService.connect(token).then(() => {
+                console.log('[Auth] WebSocket 重新連接成功');
+              }).catch(wsError => {
+                console.warn('[Auth] WebSocket 重新連接失敗:', wsError);
+              });
+            }
+            
+            // User session restored successfully
+            return; // 成功復原後直接返回，不執行下面的訪客模式設置
+          } else {
+            console.warn('[AUTH] Invalid user data structure, clearing data');
+            localStorage.removeItem('token');
+            localStorage.removeItem('userInfo');
+          }
+        } catch (parseError) {
+          console.error('[AUTH] Failed to parse userInfo:', parseError);
+          localStorage.removeItem('userInfo');
+          if (token) localStorage.removeItem('token');
+        }
       }
+      
+      // 只有在沒有有效認證資訊時才設置為訪客模式
+      // No valid auth info found, setting guest mode
+      const guestUser = {
+        id: 0,
+        email: 'guest@system.local',
+        displayName: '訪客用戶',
+        roles: ['GUEST'],
+        status: 'ACTIVE'
+      };
+      // Setting guest user
+      setUser(guestUser);
+      calculatePermissions(['GUEST']);
+      
     } catch (error) {
-      console.error('Failed to initialize auth:', error);
+      console.error('[AUTH] Failed to initialize auth:', error);
       // 出錯時也設置為訪客模式
       const guestUser = {
         id: 0,
@@ -127,97 +202,124 @@ export const useAuthV2 = () => {
         roles: ['GUEST'],
         status: 'ACTIVE'
       };
+      // Error occurred, setting guest user
       setUser(guestUser);
       calculatePermissions(['GUEST']);
     } finally {
       setLoading(false);
+      setInitialized(true);
+      // Authentication initialization completed
     }
   };
 
   const calculatePermissions = (userRoles) => {
+    // Calculate permissions for user roles
     const allPermissions = new Set();
     
     userRoles.forEach(role => {
       const roleConfig = ROLES_V2[role];
       if (roleConfig && roleConfig.permissions) {
+        // Add permissions for role
         roleConfig.permissions.forEach(perm => allPermissions.add(perm));
       }
     });
 
-    setPermissions(Array.from(allPermissions));
+    const finalPermissions = Array.from(allPermissions);
+    // Set final calculated permissions
+    setPermissions(finalPermissions);
   };
 
   const login = async (email, password) => {
     try {
-      // 模擬登入數據 - 用於測試權限系統
-      const mockUsers = {
-        'super@test.com': {
-          id: 1,
-          email: 'super@test.com',
-          displayName: '高層管理員',
-          roles: ['SUPER_ADMIN'],
-          status: 'ACTIVE'
+      // 嘗試使用真實後端 API 登入
+      const response = await fetch('http://localhost:3001/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        'host@test.com': {
-          id: 2,
-          email: 'host@test.com',
-          displayName: '主持管理',
-          roles: ['HOST_ADMIN'],
-          status: 'ACTIVE'
-        },
-        'singer@test.com': {
-          id: 3,
-          email: 'singer@test.com',
-          displayName: '歌手',
-          roles: ['SINGER'],
-          status: 'ACTIVE'
-        },
-        'player@test.com': {
-          id: 4,
-          email: 'player@test.com',
-          displayName: '玩家',
-          roles: ['PLAYER'],
-          status: 'ACTIVE'
-        },
-        'guest@test.com': {
-          id: 5,
-          email: 'guest@test.com',
-          displayName: '訪客',
-          roles: ['GUEST'],
-          status: 'ACTIVE'
+        credentials: 'include',
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          return { success: false, error: '帳號或密碼錯誤' };
         }
+        // 後端不可用，返回錯誤
+        console.log('[AUTH] Backend unavailable');
+        return { success: false, error: '服務器不可用，請稍後再試' };
+      }
+
+      const data = await response.json();
+      
+      // 從後端回應中獲取角色資訊，並將其映射到前端角色系統
+      const backendRole = data.user.role || 'GUEST';
+      
+      // 後端到前端角色映射
+      const roleMapping = {
+        'SUPER_ADMIN': ['SUPER_ADMIN'],
+        'ADMIN': ['SUPER_ADMIN'], // ADMIN 映射到 SUPER_ADMIN
+        'MANAGER': ['HOST_ADMIN'], // MANAGER 映射到 HOST_ADMIN
+        'USER': ['PLAYER'], // USER 映射到 PLAYER
+        'GUEST': ['GUEST']
       };
 
-      // 驗證密碼（模擬）
-      if (password !== '123456') {
-        return { success: false, error: '密碼錯誤' };
-      }
-
-      const userData = mockUsers[email];
-      if (!userData) {
-        return { success: false, error: '找不到該用戶' };
-      }
-
-      // 模擬 JWT token
-      const accessToken = 'mock_jwt_token_' + Date.now();
+      // 構建用戶數據
+      const userDataWithRoles = {
+        id: data.user.id,
+        email: data.user.email,
+        displayName: data.user.displayName || '用戶',
+        roles: roleMapping[backendRole] || ['GUEST'],
+        status: 'ACTIVE',
+        loginTime: new Date().toISOString(),
+      };
 
       // 儲存認證資訊
-      localStorage.setItem('token', accessToken);
-      localStorage.setItem('userInfo', JSON.stringify(userData));
+      try {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userInfo', JSON.stringify(userDataWithRoles));
+      } catch (storageError) {
+        console.error('[AUTH] Failed to save to localStorage:', storageError);
+        return { success: false, error: '無法儲存登入資訊' };
+      }
 
-      setUser(userData);
-      calculatePermissions(userData.roles || []);
+      setUser(userDataWithRoles);
+      calculatePermissions(userDataWithRoles.roles || []);
 
-      return { success: true, user: userData };
+      // 建立 WebSocket 連接
+      try {
+        await websocketService.connect(data.token);
+        console.log('[Auth] WebSocket 連接成功');
+      } catch (wsError) {
+        console.warn('[Auth] WebSocket 連接失敗:', wsError);
+      }
+
+      return { success: true, user: userDataWithRoles };
     } catch (error) {
-      console.error('Login error:', error);
-      return { success: false, error: error.message };
+      console.error('[AUTH] Backend connection failed:', error);
+      // 網絡錯誤，返回錯誤
+      return { success: false, error: '網絡連接失敗，請檢查網絡狀況後重試' };
     }
   };
 
+
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userInfo');
+    // User manually logging out
+    try {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userInfo');
+      // Cleared localStorage
+    } catch (error) {
+      console.error('[AUTH] Error clearing localStorage:', error);
+    }
+    
+    // 斷開 WebSocket 連接
+    try {
+      websocketService.disconnect();
+      console.log('[Auth] WebSocket 已斷開');
+    } catch (wsError) {
+      console.warn('[Auth] WebSocket 斷開失敗:', wsError);
+    }
     
     // 設置為訪客用戶而不是 null
     const guestUser = {
@@ -230,6 +332,13 @@ export const useAuthV2 = () => {
     
     setUser(guestUser);
     calculatePermissions(['GUEST']);
+    // Logout completed, set to guest mode
+  };
+  
+  // 添加一個手動刷新認證的功能
+  const refreshAuth = () => {
+    // Manually refreshing authentication
+    initializeAuth();
   };
 
   // 檢查是否有特定權限
@@ -258,9 +367,12 @@ export const useAuthV2 = () => {
   // 檢查是否可以看到特定 widget
   const canViewWidget = (widgetKey) => {
     const requiredPermissions = WIDGET_PERMISSIONS[widgetKey];
-    if (!requiredPermissions || requiredPermissions.length === 0) return true;
+    if (!requiredPermissions || requiredPermissions.length === 0) {
+      return true;
+    }
     
-    return hasAnyPermission(requiredPermissions);
+    const hasAccess = hasAnyPermission(requiredPermissions);
+    return hasAccess;
   };
 
   // 獲取用戶最高角色資訊
@@ -286,7 +398,7 @@ export const useAuthV2 = () => {
     hasRoleLevel,
     canViewWidget,
     getPrimaryRole,
-    refreshAuth: initializeAuth,
+    refreshAuth, // 新增的手動刷新功能
     ROLES_V2
   };
 };
